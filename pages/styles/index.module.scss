@@ -1,0 +1,26 @@
+.hero {
+  position: relative;
+  color: white;
+
+  .title {
+    font-size: 30rem !important;
+  }
+}
+
+.heroBackground {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-image: url('/survival2.png');
+  background-position: center center;
+  background-size: cover;
+
+  &:after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.4;
+  }
+}

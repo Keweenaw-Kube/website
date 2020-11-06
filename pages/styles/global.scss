@@ -1,0 +1,21 @@
+@import "~bulma/sass/utilities/functions";
+
+// Bulma overrides
+
+// Fonts
+$family-primary: "Montserrat", BlinkMacSystemFont, -apple-system, "Arial", sans-serif;
+$family-secondary: "Lora", serif;
+
+$title-family: $family-secondary;
+$title-weight: 700;
+
+// Colors
+$yellow: #FCD11A;
+$cyan: #46C9FD;
+
+$primary: darken($yellow, 10%);
+$info: darken($cyan, 10%);
+
+// Import Bulma styles
+@import "~bulma/bulma";
+@import "~rbx/rbx";
