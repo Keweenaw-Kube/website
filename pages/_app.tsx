@@ -2,7 +2,9 @@ import React from 'react';
 import {AppProps} from 'next/app';
 import Link from 'next/link';
 import Head from 'next/head';
-import {Navbar, Button} from 'rbx';
+import {Navbar, Button, Tag} from 'rbx';
+import ButterToast, {POS_BOTTOM, POS_RIGHT} from 'butter-toast';
+import LoginButton from '../components/login-button';
 // eslint-disable-next-line import/no-unassigned-import
 import './styles/global.scss';
 
@@ -43,16 +45,18 @@ function MyApp({Component, pageProps}: AppProps) {
 					<Navbar.Segment align="end">
 						<Navbar.Item>
 							<Button.Group>
-								<Link passHref href="/login">
-									<Button color="primary" as="a">
+								<LoginButton render={renderProps => (
+									<Button color="primary" disabled={typeof window === 'undefined' ? true : renderProps.disabled} onClick={renderProps.onClick}>
 										<strong>Login</strong>
 									</Button>
-								</Link>
+								)}/>
 							</Button.Group>
 						</Navbar.Item>
 					</Navbar.Segment>
 				</Navbar.Menu>
 			</Navbar>
+
+			<ButterToast position={{vertical: POS_BOTTOM, horizontal: POS_RIGHT}}/>
 
 			<Component {...pageProps}/>
 		</div>

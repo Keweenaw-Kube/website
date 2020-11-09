@@ -16,6 +16,11 @@ $cyan: #46C9FD;
 $primary: darken($yellow, 10%);
 $info: darken($cyan, 10%);
 
+// Block Mode™️
+$radius-small: 0;
+$radius: 0;
+$radius-large: 0;
+
 // Import Bulma styles
 @import "~bulma/bulma";
 @import "~rbx/rbx";
