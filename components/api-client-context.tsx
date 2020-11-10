@@ -26,7 +26,7 @@ export const useAPI = () => {
 	return useContext(APIContext);
 };
 
-export const useAPIRoute = <T extends Record<string, unknown>>(route: string) => {
+export const useAPIRoute = <T extends Record<symbol, unknown>>(route: string) => {
 	const router = useRouter();
 	const [client, setAuthToken] = useAPI();
 
