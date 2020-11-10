@@ -1,9 +1,9 @@
 import jwt, {JwtHeader, SigningKeyCallback} from 'jsonwebtoken';
 import jwk from 'jwks-rsa';
 import {NextApiRequest, NextApiResponse} from 'next';
-import {PrismaClient} from '@prisma/client';
 import {NextHandler} from 'next-connect';
 import {SIGNING_SECRET} from './config';
+import prisma from './db';
 
 export const signObject = (object: Record<string, unknown>) => {
 	return jwt.sign(object, SIGNING_SECRET, {expiresIn: '24h'});
@@ -55,8 +55,6 @@ export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextA
 		res.status(401).end();
 		return;
 	}
-
-	const prisma = new PrismaClient();
 
 	return new Promise((resolve, reject) => {
 		jwt.verify(token, SIGNING_SECRET, {}, async (error, decoded) => {

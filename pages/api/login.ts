@@ -1,5 +1,5 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {PrismaClient} from '@prisma/client';
+import prisma from './lib/db';
 import {checkAndDecodeGoogleJWT, signObject} from './lib/auth';
 
 interface GoogleJWT {
@@ -17,8 +17,6 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 
 	try {
 		const decoded = await checkAndDecodeGoogleJWT(googleJWT) as GoogleJWT;
-
-		const prisma = new PrismaClient();
 
 		let user = await prisma.user.findOne({where: {email: decoded.email}});
 
