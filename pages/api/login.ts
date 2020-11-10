@@ -36,7 +36,8 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 		const token = signObject({
 			isOfficer: user.isOfficer,
 			picture: decoded.picture,
-			name: decoded.given_name
+			name: decoded.given_name,
+			email: decoded.email
 		});
 
 		res.status(200).json({token});

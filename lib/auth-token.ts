@@ -5,6 +5,7 @@ import nextCookie from 'next-cookies';
 
 export type DecodedToken = {
 	readonly name: string;
+	readonly email: string;
 	readonly picture: string;
 	readonly exp: number;
 	readonly isOfficer: boolean;
@@ -17,6 +18,7 @@ export class AuthToken {
 		// We are going to default to an expired decodedToken
 		this.decodedToken = {
 			picture: '',
+			email: '',
 			name: '',
 			exp: 0,
 			isOfficer: false
@@ -64,11 +66,7 @@ export class AuthToken {
 	static fromCookie() {
 		const token = Cookie.get('token');
 
-		if (token) {
-			return new AuthToken(token);
-		}
-
-		return null;
+		return new AuthToken(token);
 	}
 
 	static clearToken() {

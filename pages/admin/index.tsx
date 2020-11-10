@@ -30,7 +30,7 @@ const AdminHome = () => {
 		<Container>
 			<Block/>
 
-			<Title size={1}>Hi, {client.token.decodedToken.name}</Title>
+			<Title size={1}>Hello, {client.token.decodedToken.name}.</Title>
 
 			<Block/>
 			{
