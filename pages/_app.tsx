@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AppProps} from 'next/app';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -7,8 +7,21 @@ import ButterToast, {POS_BOTTOM, POS_RIGHT} from 'butter-toast';
 import LoginButton from '../components/login-button';
 // eslint-disable-next-line import/no-unassigned-import
 import './styles/global.scss';
+import {APIClientProvider, useAPI} from '../components/api-client-context';
+import {AuthToken} from '../lib/auth-token';
 
 function MyApp({Component, pageProps}: AppProps) {
+	const [,setAuthToken] = useAPI();
+
+	// Set auth token upon mount
+	useEffect(() => {
+		const token = AuthToken.fromCookie();
+
+		if (token) {
+			setAuthToken(token);
+		}
+	}, [setAuthToken]);
+
 	return (
 		<div>
 			<Head>
@@ -46,8 +59,8 @@ function MyApp({Component, pageProps}: AppProps) {
 						<Navbar.Item>
 							<Button.Group>
 								<LoginButton render={renderProps => (
-									<Button color="primary" disabled={typeof window === 'undefined' ? true : renderProps.disabled} onClick={renderProps.onClick}>
-										<strong>Login</strong>
+									<Button color={renderProps.loggedIn ? 'danger' : 'primary'} disabled={typeof window === 'undefined' ? true : renderProps.disabled} onClick={renderProps.onClick}>
+										<strong>{renderProps.loggedIn ? 'Logout' : 'Login'}</strong>
 									</Button>
 								)}/>
 							</Button.Group>
@@ -63,4 +76,10 @@ function MyApp({Component, pageProps}: AppProps) {
 	);
 }
 
-export default MyApp;
+const WrappedApp = (props: AppProps) => (
+	<APIClientProvider>
+		<MyApp {...props}/>
+	</APIClientProvider>
+);
+
+export default WrappedApp;

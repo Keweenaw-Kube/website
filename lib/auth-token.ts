@@ -1,4 +1,4 @@
-import {NextPageContext} from 'next';
+import {NextPageContext, GetServerSidePropsContext} from 'next';
 import jwtDecode from 'jwt-decode';
 import Cookie from 'js-cookie';
 import nextCookie from 'next-cookies';
@@ -48,10 +48,20 @@ export class AuthToken {
 		Cookie.set('token', token);
 	}
 
-	static fromNext(ctx: NextPageContext) {
+	static fromNext(ctx: NextPageContext | GetServerSidePropsContext) {
 		const {token} = nextCookie(ctx);
 
 		return new AuthToken(token);
+	}
+
+	static fromCookie() {
+		const token = Cookie.get('token');
+
+		if (token) {
+			return new AuthToken(token);
+		}
+
+		return null;
 	}
 
 	static clearToken() {
