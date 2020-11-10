@@ -21,7 +21,13 @@ const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?
 
 				AuthToken.storeToken(token);
 
-				setAuthToken(new AuthToken(token));
+				const newToken = new AuthToken(token);
+
+				setAuthToken(newToken);
+
+				if (newToken.decodedToken.isOfficer) {
+					await router.push('/admin');
+				}
 			} else {
 				displayLoginError();
 			}
@@ -44,9 +50,21 @@ const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?
 
 	const loggedIn = apiClient.isAuthorized();
 
+	const shouldButtonBeDisabled = (googleDisabled: boolean | undefined) => {
+		if (typeof window === 'undefined') {
+			return true;
+		}
+
+		if (loggedIn) {
+			return false;
+		}
+
+		return googleDisabled;
+	};
+
 	return (
 		<GoogleLogin
-			clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string} render={renderProps => render({disabled: typeof window === 'undefined' ? true : renderProps.disabled, onClick: loggedIn ? handleLogout : renderProps.onClick, loggedIn})}
+			clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string} render={renderProps => render({disabled: shouldButtonBeDisabled(renderProps.disabled), onClick: loggedIn ? handleLogout : renderProps.onClick, loggedIn})}
 			cookiePolicy="single_host_origin"
 			onSuccess={handleLoginSuccess}
 			onFailure={handleLoginFailure}

@@ -3,7 +3,7 @@ import ky from 'ky/umd';
 import {AuthToken} from './auth-token';
 
 export class APIClient {
-	private readonly token: AuthToken;
+	readonly token: AuthToken;
 
 	constructor(token: AuthToken) {
 		this.token = token;

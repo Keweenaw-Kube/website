@@ -37,8 +37,8 @@ model Server {
 
 model User {
   id            Int         @id @default(autoincrement())
-  email         String?
-  minecraftUUID String      @map("mc-uuid")
+  email         String?     @unique
+  minecraftUUID String?     @map("mc-uuid")
   createdAt     DateTime    @default(now())
   isOfficer     Boolean     @default(false)
   pictures      Picture[]

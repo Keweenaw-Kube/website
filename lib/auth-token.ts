@@ -4,8 +4,10 @@ import Cookie from 'js-cookie';
 import nextCookie from 'next-cookies';
 
 export type DecodedToken = {
+	readonly name: string;
 	readonly picture: string;
 	readonly exp: number;
+	readonly isOfficer: boolean;
 };
 
 export class AuthToken {
@@ -13,7 +15,12 @@ export class AuthToken {
 
 	constructor(readonly token?: string) {
 		// We are going to default to an expired decodedToken
-		this.decodedToken = {picture: '', exp: 0};
+		this.decodedToken = {
+			picture: '',
+			name: '',
+			exp: 0,
+			isOfficer: false
+		};
 
 		// Then try and decode the jwt using jwt-decode
 		try {
