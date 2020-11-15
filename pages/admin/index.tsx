@@ -24,7 +24,7 @@ const LINKS = [
 ];
 
 const AdminHome = () => {
-	const [client] = useAPI();
+	const {client} = useAPI();
 
 	return (
 		<Container>

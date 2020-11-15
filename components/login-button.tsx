@@ -8,7 +8,7 @@ import {useAPI} from './api-client-context';
 
 const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?: boolean; loggedIn: boolean }) => JSX.Element}) => {
 	const router = useRouter();
-	const [apiClient, setAuthToken] = useAPI();
+	const {client, setAuthToken} = useAPI();
 
 	const displayLoginError = () => ButterToast.raise({
 		content: <Tag color="danger" size="large">Error logging in</Tag>
@@ -17,7 +17,7 @@ const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?
 	const handleLoginSuccess = async (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
 		try {
 			if ((response as GoogleLoginResponse).tokenId) {
-				const token = await apiClient.login((response as GoogleLoginResponse).tokenId);
+				const token = await client.login((response as GoogleLoginResponse).tokenId);
 
 				AuthToken.storeToken(token);
 
@@ -48,7 +48,7 @@ const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?
 		await router.push('/');
 	};
 
-	const loggedIn = apiClient.isAuthorized();
+	const loggedIn = client.isAuthorized();
 
 	const shouldButtonBeDisabled = (googleDisabled: boolean | undefined) => {
 		if (loggedIn) {

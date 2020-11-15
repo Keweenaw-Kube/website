@@ -24,12 +24,14 @@ export const APIClientProvider = ({children, token}: {children: React.ReactNode;
 };
 
 export const useAPI = () => {
-	return useContext(APIContext);
+	const [client, setAuthToken] = useContext(APIContext);
+
+	return {client, setAuthToken};
 };
 
 export const useAPIRoute = <T extends Record<symbol, unknown>>(route: string) => {
 	const router = useRouter();
-	const [client, setAuthToken] = useAPI();
+	const {client, setAuthToken} = useAPI();
 
 	const fetcher = useMemo(() => async (input: RequestInfo, init?: RequestInit | undefined) => {
 		const options = init ?? {};
