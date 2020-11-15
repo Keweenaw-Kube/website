@@ -12,7 +12,7 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 	const googleJWT = request.headers.authorization;
 
 	if (!googleJWT) {
-		return res.status(401);
+		return res.status(401).json({error: 'token not found'});
 	}
 
 	try {
@@ -40,7 +40,7 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 
 		res.status(200).json({token});
 	} catch {
-		res.status(401);
+		res.status(401).json({error: 'could not decode/verify token'});
 	}
 };
 

@@ -1,9 +1,10 @@
+import {NextPageContext} from 'next';
 import React, {Component} from 'react';
 import {APIClient} from '../lib/api-client';
 import {AuthToken} from '../lib/auth-token';
 
 type AuthProps = {
-	auth: AuthToken;
+	token: string;
 };
 
 export type APIClientProps = {
@@ -12,14 +13,15 @@ export type APIClientProps = {
 
 export function privateRoute(WrappedComponent: any) {
 	return class extends Component<AuthProps> {
-		static async getInitialProps(ctx: any) {
+		static async getInitialProps(ctx: NextPageContext) {
 			const auth = AuthToken.fromNext(ctx);
-			const initialProps = {auth};
+
+			const initialProps = {token: auth.token};
 			if (auth.isExpired) {
-				ctx.res.writeHead(302, {
+				ctx.res?.writeHead(302, {
 					Location: '/'
 				});
-				ctx.res.end();
+				ctx.res?.end();
 			}
 
 			if (WrappedComponent.getInitialProps) {
@@ -29,16 +31,8 @@ export function privateRoute(WrappedComponent: any) {
 			return initialProps;
 		}
 
-		get auth() {
-			return new AuthToken(this.props.auth.token);
-		}
-
-		get client() {
-			return new APIClient(this.auth);
-		}
-
 		render() {
-			return <WrappedComponent client={this.client} {...this.props}/>;
+			return <WrappedComponent client={new APIClient(new AuthToken(this.props.token))} {...this.props}/>;
 		}
 	};
 }

@@ -51,12 +51,12 @@ const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?
 	const loggedIn = apiClient.isAuthorized();
 
 	const shouldButtonBeDisabled = (googleDisabled: boolean | undefined) => {
-		if (typeof window === 'undefined') {
-			return true;
-		}
-
 		if (loggedIn) {
 			return false;
+		}
+
+		if (typeof window === 'undefined') {
+			return true;
 		}
 
 		return googleDisabled;

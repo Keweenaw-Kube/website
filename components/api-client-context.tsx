@@ -8,11 +8,12 @@ import {AuthToken} from '../lib/auth-token';
 
 const APIContext = React.createContext<[APIClient, (newToken: AuthToken) => void]>([new APIClient(AuthToken.fromCookie()), (newToken: AuthToken) => { /* default value */ }]);
 
-export const APIClientProvider = ({children}: {children: React.ReactNode}) => {
-	const [client, setClient] = useState(new APIClient(AuthToken.fromCookie()));
+export const APIClientProvider = ({children, token}: {children: React.ReactNode; token: AuthToken}) => {
+	// Need to re-instantiate AuthToken because of hydration
+	const [client, setClient] = useState(new APIClient(new AuthToken(token.token)));
 
 	const setAuthToken = useCallback((newToken: AuthToken) => {
-		setClient(new APIClient(newToken));
+		setClient(new APIClient(new AuthToken(newToken.token)));
 	}, []);
 
 	return (
