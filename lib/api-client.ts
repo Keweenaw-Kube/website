@@ -44,6 +44,12 @@ export class APIClient {
 	}
 
 	async putServer(id: number, server: Partial<IServer>) {
-		await this.client.put(`api/servers/${id}`, {json: server});
+		await this.client.put(`api/servers/${id}`, {json: this.removeIdField(server)});
+	}
+
+	private removeIdField(obj: any) {
+		delete obj.id;
+
+		return obj;
 	}
 }

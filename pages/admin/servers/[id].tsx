@@ -5,6 +5,7 @@ import {Title, Container, Box, Block, Field, Label, Control, Input, Textarea, Bu
 import {IServer} from '../../../lib/types';
 import {privateRoute} from '../../../components/private-route';
 import {useAPI} from '../../../components/api-client-context';
+import ModelEdit from '../../../components/model-edit';
 import {APIClient} from '../../../lib/api-client';
 
 const WrappedField = ({label, value, onChange, as}: {label: string; value: string; onChange: (v: string) => void; as?: string}) => (
@@ -22,10 +23,8 @@ const WrappedField = ({label, value, onChange, as}: {label: string; value: strin
 	</Field>
 );
 
-const EditServer: NextPage<{server: IServer}> = ({server}) => {
-	const [name, setName] = useState(server.name);
-	const [description, setDescription] = useState(server.description);
-	const [domain, setDomain] = useState(server.domain);
+const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
+	const [server, setServer] = useState(propsServer);
 	const [loading, setLoading] = useState(false);
 
 	const router = useRouter();
@@ -34,34 +33,39 @@ const EditServer: NextPage<{server: IServer}> = ({server}) => {
 
 	const handleSubmit = async () => {
 		setLoading(true);
-		await client.putServer(server.id, {
-			name,
-			description,
-			domain
-		});
+		await client.putServer(server.id, server);
 		setLoading(false);
 		router.back();
 	};
+
+	const handleFieldChange = (name: string, value: string) => setServer(s => ({...s, [name]: value}));
+
+	const fields = [
+		{
+			label: 'Name',
+			name: 'name',
+			value: server.name
+		},
+		{
+			label: 'Domain',
+			name: 'domain',
+			value: server.domain
+		},
+		{
+			label: 'Description',
+			name: 'description',
+			value: server.description,
+			type: 'textarea' as const
+		}
+	];
 
 	return (
 		<Container>
 			<Block/>
 
-			<Title size={1}>Edit {name}</Title>
+			<Title size={1}>Edit {server.name}</Title>
 
-			<WrappedField label="Name" value={name} onChange={setName}/>
-			<WrappedField label="Domain" value={domain} onChange={setDomain}/>
-			<WrappedField label="Description" value={description} as="textarea" onChange={setDescription}/>
-
-			<Field kind="group">
-				<Control>
-					<Button {...(loading ? {state: 'loading'} : {})} color="primary" onClick={handleSubmit}>Save</Button>
-				</Control>
-
-				<Control>
-					<Button {...(loading ? {state: 'loading'} : {})} color="danger" onClick={() => router.back()}>Cancel</Button>
-				</Control>
-			</Field>
+			<ModelEdit fields={fields} loading={loading} onSave={handleSubmit} onChange={handleFieldChange}/>
 		</Container>
 	);
 };
@@ -76,4 +80,4 @@ EditServer.getInitialProps = async context => {
 	return {server};
 };
 
-export default privateRoute(EditServer);
+export default privateRoute<{server: IServer}>(EditServer);
