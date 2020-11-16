@@ -44,6 +44,6 @@ export class APIClient {
 	}
 
 	async putServer(id: number, server: Partial<IServer>) {
-		await this.client.put(`api/server/${id}`, {json: server});
+		await this.client.put(`api/servers/${id}`, {json: server});
 	}
 }

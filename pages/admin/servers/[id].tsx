@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {NextPage} from 'next';
+import {useRouter} from 'next/router';
 import {Title, Container, Box, Block, Field, Label, Control, Input, Textarea, Button} from 'rbx';
 import {IServer} from '../../../lib/types';
 import {privateRoute} from '../../../components/private-route';
@@ -25,15 +26,21 @@ const EditServer: NextPage<{server: IServer}> = ({server}) => {
 	const [name, setName] = useState(server.name);
 	const [description, setDescription] = useState(server.description);
 	const [domain, setDomain] = useState(server.domain);
+	const [loading, setLoading] = useState(false);
+
+	const router = useRouter();
 
 	const {client} = useAPI();
 
 	const handleSubmit = async () => {
+		setLoading(true);
 		await client.putServer(server.id, {
 			name,
 			description,
 			domain
 		});
+		setLoading(false);
+		router.back();
 	};
 
 	return (
@@ -46,9 +53,13 @@ const EditServer: NextPage<{server: IServer}> = ({server}) => {
 			<WrappedField label="Domain" value={domain} onChange={setDomain}/>
 			<WrappedField label="Description" value={description} as="textarea" onChange={setDescription}/>
 
-			<Field>
+			<Field kind="group">
 				<Control>
-					<Button color="primary" onClick={handleSubmit}>Save</Button>
+					<Button {...(loading ? {state: 'loading'} : {})} color="primary" onClick={handleSubmit}>Save</Button>
+				</Control>
+
+				<Control>
+					<Button {...(loading ? {state: 'loading'} : {})} color="danger" onClick={() => router.back()}>Cancel</Button>
 				</Control>
 			</Field>
 		</Container>

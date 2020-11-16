@@ -4,7 +4,6 @@ import prisma from '../lib/db';
 import {authMiddleware} from '../lib/auth';
 
 export default nc()
-	// .use(authMiddleware({limitToOfficer: true}))
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = Number.parseInt(request.query.id as string, 10);
 
@@ -15,10 +14,18 @@ export default nc()
 		});
 
 		res.json(server);
+	})
+	.use(authMiddleware({limitToOfficer: true}))
+	.put(async (request: NextApiRequest, res: NextApiResponse) => {
+		const id = Number.parseInt(request.query.id as string, 10);
+
+		await prisma.server.update({
+			where: {
+				id
+			},
+			data: request.body
+		});
+
+		res.json({});
 	});
 
-export const getServerById = async (id: number) => prisma.server.findOne({
-	where: {
-		id
-	}
-});
