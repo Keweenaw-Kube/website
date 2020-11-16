@@ -1,5 +1,6 @@
 import {NextPageContext} from 'next';
 import ky from 'ky/umd';
+import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
 import {IServer} from './types';
 import {getBaseURL} from './helpers';
@@ -43,13 +44,11 @@ export class APIClient {
 		return this.client.get(`api/servers/${id}`).json<IServer>();
 	}
 
-	async putServer(id: number, server: Partial<IServer>) {
-		await this.client.put(`api/servers/${id}`, {json: this.removeIdField(server)});
+	async putServer(id: number, server: Except<IServer, 'id'>) {
+		await this.client.put(`api/servers/${id}`, {json: server});
 	}
 
-	private removeIdField(obj: any) {
-		delete obj.id;
-
-		return obj;
+	async createServer(server: Except<IServer, 'id'>) {
+		return this.client.post('api/servers', {json: server}).json<IServer>();
 	}
 }

@@ -8,21 +8,6 @@ import {useAPI} from '../../../components/api-client-context';
 import ModelEdit from '../../../components/model-edit';
 import {APIClient} from '../../../lib/api-client';
 
-const WrappedField = ({label, value, onChange, as}: {label: string; value: string; onChange: (v: string) => void; as?: string}) => (
-	<Field>
-		<Label>{label}</Label>
-		<Control>
-			{
-				as === 'textarea' ? (
-					<Textarea value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
-				) : (
-					<Input type="text" value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
-				)
-			}
-		</Control>
-	</Field>
-);
-
 const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 	const [server, setServer] = useState(propsServer);
 	const [loading, setLoading] = useState(false);
