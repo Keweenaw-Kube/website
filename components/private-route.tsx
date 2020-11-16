@@ -1,4 +1,4 @@
-import {NextPageContext} from 'next';
+import {NextPageContext, NextPage} from 'next';
 import React, {Component} from 'react';
 import {APIClient} from '../lib/api-client';
 import {AuthToken} from '../lib/auth-token';
@@ -7,16 +7,11 @@ type AuthProps = {
 	token: string;
 };
 
-export type APIClientProps = {
-	client: APIClient;
-};
-
-export function privateRoute(WrappedComponent: any) {
+export function privateRoute(WrappedComponent: NextPage) {
 	return class extends Component<AuthProps> {
 		static async getInitialProps(ctx: NextPageContext) {
 			const auth = AuthToken.fromNext(ctx);
 
-			const initialProps = {token: auth.token};
 			if (auth.isExpired) {
 				ctx.res?.writeHead(302, {
 					Location: '/'
@@ -24,15 +19,17 @@ export function privateRoute(WrappedComponent: any) {
 				ctx.res?.end();
 			}
 
+			let wrappedProps = {};
+
 			if (WrappedComponent.getInitialProps) {
-				return WrappedComponent.getInitialProps(initialProps);
+				wrappedProps = await WrappedComponent.getInitialProps(ctx);
 			}
 
-			return initialProps;
+			return wrappedProps;
 		}
 
 		render() {
-			return <WrappedComponent client={new APIClient(new AuthToken(this.props.token))} {...this.props}/>;
+			return <WrappedComponent {...this.props}/>;
 		}
 	};
 }

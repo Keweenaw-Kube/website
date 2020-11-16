@@ -1,9 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import {Title, Container, Box, Block, Table, Button, Icon, Progress} from 'rbx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPen} from '@fortawesome/free-solid-svg-icons';
-import {privateRoute} from '../../components/private-route';
-import {useAPIRoute} from '../../components/api-client-context';
+import {privateRoute} from '../../../components/private-route';
+import {useAPIRoute} from '../../../components/api-client-context';
 
 interface IServer {
 	id: number;
@@ -42,11 +43,13 @@ const ServersPage = () => {
 										<Table.Cell>{server.name}</Table.Cell>
 										<Table.Cell>{server.domain}</Table.Cell>
 										<Table.Cell>
-											<Button color="warning">
-												<Icon size="small">
-													<FontAwesomeIcon icon={faPen} color="black"/>
-												</Icon>
-											</Button>
+											<Link passHref href={`/admin/servers/${server.id as number}`}>
+												<Button color="warning" as="a">
+													<Icon size="small">
+														<FontAwesomeIcon icon={faPen} color="black"/>
+													</Icon>
+												</Button>
+											</Link>
 										</Table.Cell>
 									</Table.Row>
 								))

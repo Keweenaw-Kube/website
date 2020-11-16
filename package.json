@@ -53,7 +53,8 @@
     "extends": "xo-react",
     "rules": {
       "react/function-component-definition": "off",
-      "unicorn/prevent-abbreviations": "off"
+      "unicorn/prevent-abbreviations": "off",
+      "react/prop-types": "off"
     }
   },
   "husky": {

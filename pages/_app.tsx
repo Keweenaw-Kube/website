@@ -37,7 +37,7 @@ WrappedApp.getInitialProps = async (props: AppContextType<Router>) => {
 	const appProps = await App.getInitialProps(props);
 
 	return {
-		...appProps.pageProps,
+		...appProps,
 		token: AuthToken.fromNext(props.ctx)
 	};
 };
