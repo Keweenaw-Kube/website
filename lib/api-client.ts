@@ -2,7 +2,7 @@ import {NextPageContext} from 'next';
 import ky from 'ky/umd';
 import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
-import {IServer} from './types';
+import {IServer, IRole} from './types';
 import {getBaseURL} from './helpers';
 
 export class APIClient {
@@ -50,5 +50,9 @@ export class APIClient {
 
 	async createServer(server: Except<IServer, 'id'>) {
 		return this.client.post('api/servers', {json: server}).json<IServer>();
+	}
+
+	async createRole(role: Except<IRole, 'id'>) {
+		return this.client.post('api/roles', {json: role}).json<IRole>();
 	}
 }

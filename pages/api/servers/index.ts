@@ -5,7 +5,7 @@ import {authMiddleware} from '../lib/auth';
 
 export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
-		const servers = await prisma.server.findMany();
+		const servers = await prisma.server.findMany({orderBy: {name: 'asc'}});
 
 		res.status(200).json(servers);
 	})

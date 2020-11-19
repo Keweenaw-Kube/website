@@ -1,55 +1,44 @@
 import React, {useState} from 'react';
 import {Container, Block, Title} from 'rbx';
 import {useRouter} from 'next/router';
-import {IServer} from '../../../lib/types';
+import {IRole} from '../../../lib/types';
 import ModelEdit from '../../../components/model-edit';
 import {useAPI} from '../../../components/api-client-context';
 
-const NewServer = () => {
+const NewRole = () => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
-	const [server, setServer] = useState<IServer>({id: -1, name: '', domain: '', description: ''});
+	const [role, setRole] = useState<IRole>({id: -1, name: ''});
 	const {client} = useAPI();
 
 	const fields = [
 		{
 			label: 'Name',
 			name: 'name',
-			value: server.name
-		},
-		{
-			label: 'Domain',
-			name: 'domain',
-			value: server.domain
-		},
-		{
-			label: 'Description',
-			name: 'description',
-			value: server.description,
-			type: 'textarea' as const
+			value: role.name
 		}
 	];
 
 	const handleSubmit = async () => {
 		setLoading(true);
-		const s = {...server};
+		const s = {...role};
 		delete (s as any).id;
-		await client.createServer(s);
+		await client.createRole(s);
 		setLoading(false);
-		await router.push('/admin/servers');
+		await router.push('/admin/roles');
 	};
 
-	const handleFieldChange = (name: string, value: string) => setServer(s => ({...s, [name]: value}));
+	const handleFieldChange = (name: string, value: string) => setRole(s => ({...s, [name]: value}));
 
 	return (
 		<Container>
 			<Block/>
 
-			<Title size={1}>Add a server</Title>
+			<Title size={1}>Add a role</Title>
 
 			<ModelEdit fields={fields} loading={loading} onSave={handleSubmit} onChange={handleFieldChange}/>
 		</Container>
 	);
 };
 
-export default NewServer;
+export default NewRole;
