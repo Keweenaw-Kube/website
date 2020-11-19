@@ -47,7 +47,7 @@ const MainNavbar = () => {
 					}
 
 					{
-						isOfficer && (
+						isOfficer && isLoggedIn && (
 							<Link passHref href="/admin">
 								<Navbar.Item>Admin</Navbar.Item>
 							</Link>

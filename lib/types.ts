@@ -4,3 +4,8 @@ export interface IServer {
 	description: string;
 	domain: string;
 }
+
+export interface IRole {
+	id: number;
+	name: string;
+}

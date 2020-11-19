@@ -6,24 +6,23 @@ import {faPen} from '@fortawesome/free-solid-svg-icons';
 import {privateRoute} from '../../../components/private-route';
 import {useAPIRoute} from '../../../components/api-client-context';
 import ModelTable from '../../../components/model-table';
-import {IServer} from '../../../lib/types';
+import {IRole} from '../../../lib/types';
 
-const ServersPage = () => {
-	const servers = useAPIRoute<IServer[]>('/api/servers');
+const Roles = () => {
+	const roles = useAPIRoute<IRole[]>('/api/roles');
 
 	return (
 		<ModelTable
-			title="Servers"
-			addHref="/admin/servers/new"
-			data={servers}
-			loading={servers === undefined}
-			headerLabels={['Name', 'Domain', 'Edit']}
-			renderRow={server => (
-				<Table.Row key={server.id}>
-					<Table.Cell>{server.name}</Table.Cell>
-					<Table.Cell>{server.domain}</Table.Cell>
+			title="Roles"
+			addHref="/admin/roles/new"
+			data={roles}
+			loading={roles === undefined}
+			headerLabels={['Name', 'Edit']}
+			renderRow={role => (
+				<Table.Row key={role.id}>
+					<Table.Cell>{role.name}</Table.Cell>
 					<Table.Cell>
-						<Link passHref href={`/admin/servers/${server.id}`}>
+						<Link passHref href={`/admin/roles/${role.id}`}>
 							<Button color="warning" as="a">
 								<Icon size="small">
 									<FontAwesomeIcon icon={faPen} color="black"/>
@@ -37,4 +36,4 @@ const ServersPage = () => {
 	);
 };
 
-export default privateRoute(ServersPage);
+export default privateRoute(Roles);
