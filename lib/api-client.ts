@@ -44,8 +44,16 @@ export class APIClient {
 		return this.client.get(`api/servers/${id}`).json<IServer>();
 	}
 
-	async putServer(id: number, server: Except<IServer, 'id'>) {
-		await this.client.put(`api/servers/${id}`, {json: server});
+	async getRole(id: number) {
+		return this.client.get(`api/roles/${id}`).json<IRole>();
+	}
+
+	async putRole(id: number, role: IRole) {
+		await this.client.put(`api/roles/${id}`, {json: this.removeId(role)});
+	}
+
+	async putServer(id: number, server: IServer) {
+		await this.client.put(`api/servers/${id}`, {json: this.removeId(server)});
 	}
 
 	async createServer(server: Except<IServer, 'id'>) {
@@ -54,5 +62,13 @@ export class APIClient {
 
 	async createRole(role: Except<IRole, 'id'>) {
 		return this.client.post('api/roles', {json: role}).json<IRole>();
+	}
+
+	private removeId<T extends {id?: number}>(obj: T): Except<T, 'id'> {
+		const o = {...obj};
+
+		delete o.id;
+
+		return o;
 	}
 }
