@@ -35,7 +35,7 @@ const AdminHome = () => {
 			<Block/>
 			{
 				LINKS.map(link => (
-					<Link key={link.href} href={link.href}>
+					<Link key={link.href} passHref href={link.href}>
 						<Box as="a" style={{display: 'flex'}}>
 							<div>
 								<strong>{link.label}</strong>

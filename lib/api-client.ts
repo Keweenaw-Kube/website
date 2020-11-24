@@ -2,7 +2,7 @@ import {NextPageContext} from 'next';
 import ky from 'ky/umd';
 import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
-import {IServer, IRole} from './types';
+import {IServer, IRole, IMojangName} from './types';
 import {getBaseURL} from './helpers';
 
 export class APIClient {
@@ -62,6 +62,10 @@ export class APIClient {
 
 	async createRole(role: Except<IRole, 'id'>) {
 		return this.client.post('api/roles', {json: role}).json<IRole>();
+	}
+
+	async getMojangProfile(uuid: string) {
+		return this.client.get(`api/mojang/profiles/${uuid}`).json<IMojangName[]>();
 	}
 
 	private removeId<T extends {id?: number}>(obj: T): Except<T, 'id'> {
