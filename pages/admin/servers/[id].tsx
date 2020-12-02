@@ -16,7 +16,11 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 
 	const {client} = useAPI();
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (event?: React.FormEvent) => {
+		if (event) {
+			event.preventDefault();
+		}
+
 		setLoading(true);
 		await client.putServer(server.id, server);
 		setLoading(false);
@@ -50,7 +54,9 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 
 			<Title size={1}>Edit</Title>
 
-			<ModelEdit fields={fields} loading={loading} onSave={handleSubmit} onChange={handleFieldChange}/>
+			<form onSubmit={handleSubmit}>
+				<ModelEdit fields={fields} loading={loading} backHref="/admin/servers" onChange={handleFieldChange}/>
+			</form>
 		</Container>
 	);
 };

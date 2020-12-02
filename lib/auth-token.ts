@@ -9,6 +9,7 @@ export type DecodedToken = {
 	readonly picture: string;
 	readonly exp: number;
 	readonly isOfficer: boolean;
+	readonly isMember: boolean;
 };
 
 export class AuthToken {
@@ -21,7 +22,8 @@ export class AuthToken {
 			email: '',
 			name: '',
 			exp: 0,
-			isOfficer: false
+			isOfficer: false,
+			isMember: false
 		};
 
 		// Then try and decode the jwt using jwt-decode

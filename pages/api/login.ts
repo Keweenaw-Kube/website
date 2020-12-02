@@ -25,20 +25,22 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 			user = await prisma.user.create({
 				data: {
 					email: decoded.email,
-					isOfficer: false
+					isOfficer: false,
+					isMember: false
 				}
 			});
 		}
 
 		// Issue new JWT
 		const token = signObject({
+			isMember: user.isMember,
 			isOfficer: user.isOfficer,
 			picture: decoded.picture,
 			name: decoded.given_name,
 			email: decoded.email
 		});
 
-		res.status(200).json({token});
+		res.status(200).json({data: {token}});
 	} catch {
 		res.status(401).json({error: 'could not decode/verify token'});
 	}

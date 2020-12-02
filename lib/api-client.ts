@@ -1,9 +1,19 @@
 import {NextPageContext} from 'next';
 import ky from 'ky/umd';
+import {Options} from 'ky';
 import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
-import {IServer, IRole, IMojangName} from './types';
+import {IServer, IRole, IMojangName, IMojangUser, IUser} from './types';
 import {getBaseURL} from './helpers';
+
+interface IAPIResponse<T> {
+	data: T;
+	error?: string;
+}
+
+interface ILoginResponse {
+	token: string;
+}
 
 export class APIClient {
 	readonly token: AuthToken;
@@ -14,11 +24,22 @@ export class APIClient {
 
 		this.token = token;
 
-		const options = {
+		const options: Options = {
 			headers: {
 				Authorization: token.isValid ? token.authorizationString : ''
 			},
-			prefixUrl: '/'
+			prefixUrl: '/',
+			hooks: {
+				afterResponse: [
+					async (_request, _options, response) => {
+						if (!response.ok) {
+							const {error} = await response.json();
+							throw new Error(error);
+						}
+					}
+				]
+			},
+			throwHttpErrors: false
 		};
 
 		if (option.constructor !== AuthToken) {
@@ -33,23 +54,22 @@ export class APIClient {
 	}
 
 	async login(jwt: string) {
-		const response = await ky.get('api/login', {headers: {
-			Authorization: jwt
-		}}).json();
+		const response = await ky.get('api/login', {
+			headers: {
+				Authorization: jwt
+			},
+			throwHttpErrors: false
+		}).json<IAPIResponse<ILoginResponse>>();
 
-		return (response as any).token as string;
+		if (response.error) {
+			throw new Error(response.error);
+		}
+
+		return response.data.token;
 	}
 
 	async getServer(id: number) {
-		return this.client.get(`api/servers/${id}`).json<IServer>();
-	}
-
-	async getRole(id: number) {
-		return this.client.get(`api/roles/${id}`).json<IRole>();
-	}
-
-	async putRole(id: number, role: IRole) {
-		await this.client.put(`api/roles/${id}`, {json: this.removeId(role)});
+		return this.getData(this.client.get(`api/servers/${id}`).json<IAPIResponse<IServer>>());
 	}
 
 	async putServer(id: number, server: IServer) {
@@ -57,15 +77,24 @@ export class APIClient {
 	}
 
 	async createServer(server: Except<IServer, 'id'>) {
-		return this.client.post('api/servers', {json: server}).json<IServer>();
+		return this.getData(this.client.post('api/servers', {json: server}).json<IAPIResponse<IServer>>());
 	}
 
-	async createRole(role: Except<IRole, 'id'>) {
-		return this.client.post('api/roles', {json: role}).json<IRole>();
+	async createUser(user: Except<IUser, 'id'>) {
+		return this.getData(this.client.post('api/users', {json: user}).json<IAPIResponse<IUser>>());
 	}
 
-	async getMojangProfile(uuid: string) {
-		return this.client.get(`api/mojang/profiles/${uuid}`).json<IMojangName[]>();
+	async getMojangNameHistory(uuid: string) {
+		return this.getData(this.client.get('api/mojang/profiles', {searchParams: {uuid}}).json<IAPIResponse<IMojangName[]>>());
+	}
+
+	async getMojangProfile(name: string) {
+		return this.getData(this.client.get('api/mojang/profiles', {searchParams: {name}}).json<IAPIResponse<IMojangUser[]>>());
+	}
+
+	private async getData<T>(req: Promise<IAPIResponse<T>>) {
+		const res = await req;
+		return res.data;
 	}
 
 	private removeId<T extends {id?: number}>(obj: T): Except<T, 'id'> {

@@ -13,7 +13,7 @@ export default nc()
 			}
 		});
 
-		res.json(server);
+		res.json({data: server});
 	})
 	.use(authMiddleware({limitToOfficer: true}))
 	.put(async (request: NextApiRequest, res: NextApiResponse) => {

@@ -16,10 +16,18 @@ export interface IUser {
 	minecraftUUID: string;
 	minecraftUsername: string;
 	isOfficer: boolean;
+	isMember: boolean;
 	isBanned: boolean;
 }
 
 export interface IMojangName {
 	name: string;
 	changedToAt?: number;
+}
+
+export interface IMojangUser {
+	id: string;
+	name: string;
+	legacy?: boolean;
+	demo?: boolean;
 }

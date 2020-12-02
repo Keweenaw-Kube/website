@@ -44,7 +44,8 @@ export const useAPIRoute = <T extends Record<symbol, unknown>>(route: string) =>
 		const res = await fetch(input, options);
 
 		if (res.ok) {
-			return res.json();
+			const data = await res.json();
+			return data.data;
 		}
 
 		if (res.status === 401) {

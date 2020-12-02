@@ -1,6 +1,7 @@
 import React from 'react';
 import {Field, Label, Control, Textarea, Input, Button} from 'rbx';
 import {useRouter} from 'next/router';
+import FormActions from './form-actions';
 
 type TInputType = 'input' | 'textarea';
 
@@ -26,7 +27,7 @@ interface IFieldDefinition {
 	type?: TInputType;
 }
 
-const ModelEdit = ({fields = [], onSave, onChange, loading = false}: {fields: IFieldDefinition[]; onSave: () => void; onChange: (name: string, value: string) => void; loading: boolean}) => {
+const ModelEdit = ({fields = [], onChange, loading = false, backHref, onCancel = () => { /* default value */ }}: {fields: IFieldDefinition[]; onChange: (name: string, value: string) => void; loading: boolean; backHref?: string; onCancel?: () => void}) => {
 	const router = useRouter();
 
 	return (
@@ -37,15 +38,7 @@ const ModelEdit = ({fields = [], onSave, onChange, loading = false}: {fields: IF
 				))
 			}
 
-			<Field kind="group">
-				<Control>
-					<Button {...(loading ? {state: 'loading'} : {})} color="primary" onClick={onSave}>Save</Button>
-				</Control>
-
-				<Control>
-					<Button {...(loading ? {state: 'loading'} : {})} color="danger" onClick={() => router.back()}>Cancel</Button>
-				</Control>
-			</Field>
+			<FormActions loading={loading} onCancel={backHref ? async () => router.push(backHref) : onCancel}/>
 		</>
 	);
 };

@@ -7,7 +7,7 @@ export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
 		const servers = await prisma.server.findMany({orderBy: {name: 'asc'}});
 
-		res.status(200).json(servers);
+		res.status(200).json({data: servers});
 	})
 	.use(authMiddleware({limitToOfficer: true}))
 	.post(async (request: NextApiRequest, res: NextApiResponse) => {
@@ -15,5 +15,5 @@ export default nc()
 			data: request.body
 		});
 
-		res.json(server);
+		res.json({data: server});
 	});

@@ -30,7 +30,11 @@ const NewServer = () => {
 		}
 	];
 
-	const handleSubmit = async () => {
+	const handleSubmit = async (event?: React.FormEvent) => {
+		if (event) {
+			event.preventDefault();
+		}
+
 		setLoading(true);
 		const s = {...server};
 		delete (s as any).id;
@@ -47,7 +51,9 @@ const NewServer = () => {
 
 			<Title size={1}>Add a server</Title>
 
-			<ModelEdit fields={fields} loading={loading} onSave={handleSubmit} onChange={handleFieldChange}/>
+			<form onSubmit={handleSubmit}>
+				<ModelEdit fields={fields} loading={loading} onChange={handleFieldChange}/>
+			</form>
 		</Container>
 	);
 };

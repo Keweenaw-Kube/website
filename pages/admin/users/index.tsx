@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
-import {Title, Container, Box, Block, Table, Button, Icon, Progress, Column, Generic} from 'rbx';
+import {Title, Container, Box, Block, Table, Button, Icon, Progress, Column, Tag} from 'rbx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPen} from '@fortawesome/free-solid-svg-icons';
 import {privateRoute} from '../../../components/private-route';
@@ -17,12 +17,17 @@ const UsersPage = () => {
 			addHref="/admin/users/new"
 			data={users}
 			loading={users === undefined}
-			headerLabels={['Email', 'Minecraft Username', 'Is Officer', 'Is Banned', 'Edit']}
+			headerLabels={['Email', 'Minecraft Username', 'Roles', 'Is Banned', 'Edit']}
 			renderRow={user => (
 				<Table.Row key={user.id}>
 					<Table.Cell>{user.email}</Table.Cell>
 					<Table.Cell>{user.minecraftUsername}</Table.Cell>
-					<Table.Cell>{user.isOfficer ? 'Yes' : 'No'}</Table.Cell>
+					<Table.Cell>
+						<Tag.Group>
+							{user.isMember && (<Tag color="info">Member</Tag>)}
+							{user.isOfficer && (<Tag color="primary">Officer</Tag>)}
+						</Tag.Group>
+					</Table.Cell>
 					<Table.Cell>{user.isBanned ? 'Yes' : 'No'}</Table.Cell>
 					<Table.Cell>
 						<Link passHref href={`/admin/users/${user.id}`}>

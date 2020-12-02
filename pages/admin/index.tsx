@@ -16,10 +16,6 @@ const LINKS = [
 	{
 		label: 'Edit pictures',
 		href: '/admin/pictures'
-	},
-	{
-		label: 'Edit roles',
-		href: '/admin/roles'
 	}
 ];
 
