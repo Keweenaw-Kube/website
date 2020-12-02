@@ -17,32 +17,24 @@ model Picture {
   user      User     @relation(fields: [userId], references: [id])
 }
 
-model WhitelistRole {
-  id              Int           @id @default(autoincrement())
-  name            String
-  servers         Server[]
-  users           User[]
-  createdAt       DateTime      @default(now())
-}
-
 model Server {
   id               Int           @id @default(autoincrement())
   name             String
   domain           String
   description      String
+  limitToMembers   Boolean       @default(true)
   createdAt        DateTime      @default(now())
   pictures         Picture[]
-  whitelistedRoles WhitelistRole[]
 }
 
 model User {
   id                Int         @id @default(autoincrement())
   email             String      @unique
-  minecraftUUID     String      @map("mc-uuid")
-  minecraftUsername String
+  minecraftUUID     String      @default("")
+  minecraftUsername String      @default("")
   createdAt         DateTime    @default(now())
+  isMember          Boolean     @default(false)
   isOfficer         Boolean     @default(false)
   isBanned          Boolean     @default(false)
   pictures          Picture[]
-  roles             WhitelistRole[]
 }
