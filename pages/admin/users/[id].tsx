@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import {Title, Container, Box, Block, Field, Label, Control, Input, Textarea, Button} from 'rbx';
@@ -43,6 +43,12 @@ const EditUser: NextPage<{user: IUser}> = ({user: propsUser}) => {
 		await router.replace('/admin/users');
 	};
 
+	useEffect(() => {
+		if (user.isOfficer) {
+			setUser(u => ({...u, isMember: true}));
+		}
+	}, [user.isOfficer]);
+
 	const handleFieldChange = (name: string, value: string | boolean) => setUser(s => ({...s, [name]: value}));
 
 	const fields: IFieldDefinition[] = [
@@ -69,7 +75,8 @@ const EditUser: NextPage<{user: IUser}> = ({user: propsUser}) => {
 			label: 'Is Member',
 			name: 'isMember',
 			value: user.isMember,
-			type: 'checkbox'
+			type: 'checkbox',
+			disabled: user.isOfficer
 		},
 		{
 			label: 'Is Banned',

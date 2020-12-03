@@ -36,14 +36,18 @@ export default nc()
 		}
 
 		// Look up Mojang username
-		const profiles = await getProfileByName(request.body.minecraftUsername);
+		if (request.body.minecraftUsername === '') {
+			request.body.minecraftUUID = '';
+		} else {
+			const profiles = await getProfileByName(request.body.minecraftUsername);
 
-		if (profiles.length === 0) {
-			res.status(400).json({error: 'Minecraft user does not exist'});
-			return;
+			if (profiles.length === 0) {
+				res.status(400).json({error: 'Minecraft user does not exist'});
+				return;
+			}
+
+			request.body.minecraftUUID = profiles[0].id;
 		}
-
-		request.body.minecraftUUID = profiles[0].id;
 
 		await prisma.user.update({
 			where: {

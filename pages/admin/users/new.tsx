@@ -1,19 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {Container, Block, Title, Field, Label, Control, Input, Button, Message, Checkbox} from 'rbx';
+import {Except} from 'type-fest';
 import {useAPI} from '../../../components/api-client-context';
 import {privateRoute} from '../../../components/private-route';
-import FormActions from '../../../components/form-actions';
+import ModelEdit, {IFieldDefinition} from '../../../components/model-edit';
+import {IUser} from '../../../lib/types';
 
 const NewUser = () => {
 	const {client} = useAPI();
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
-	const [username, setUsername] = useState('');
-	const [email, setEmail] = useState('');
-	const [isMember, setIsMember] = useState(false);
-	const [isOfficer, setIsOfficer] = useState(false);
+	const [user, setUser] = useState<Except<Except<IUser, 'id'>, 'minecraftUUID'>>({
+		email: '',
+		minecraftUsername: '',
+		isOfficer: false,
+		isMember: false,
+		isBanned: false
+	});
 
 	const handleFormSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -21,13 +26,7 @@ const NewUser = () => {
 		setLoading(true);
 
 		try {
-			await client.createUser({
-				email,
-				minecraftUsername: username,
-				isOfficer,
-				isMember,
-				isBanned: false
-			});
+			await client.createUser(user);
 
 			setErrorMsg('');
 
@@ -40,10 +39,47 @@ const NewUser = () => {
 	};
 
 	useEffect(() => {
-		if (isOfficer) {
-			setIsMember(true);
+		if (user.isOfficer) {
+			setUser(u => ({...u, isMember: true}));
 		}
-	}, [isOfficer]);
+	}, [user.isOfficer]);
+
+	const handleFieldChange = (name: string, value: string | boolean) => setUser(s => ({...s, [name]: value}));
+
+	const fields: IFieldDefinition[] = [
+		{
+			label: 'Email',
+			name: 'email',
+			value: user.email,
+			type: 'email',
+			required: true
+		},
+		{
+			label: 'Minecraft Username',
+			name: 'minecraftUsername',
+			value: user.minecraftUsername,
+			type: 'input'
+		},
+		{
+			label: 'Is Officer',
+			name: 'isOfficer',
+			value: user.isOfficer,
+			type: 'checkbox'
+		},
+		{
+			label: 'Is Member',
+			name: 'isMember',
+			value: user.isMember,
+			type: 'checkbox',
+			disabled: user.isOfficer
+		},
+		{
+			label: 'Is Banned',
+			name: 'isBanned',
+			value: user.isBanned,
+			type: 'checkbox'
+		}
+	];
 
 	return (
 		<Container>
@@ -51,46 +87,8 @@ const NewUser = () => {
 
 			<Title size={1}>Add a user</Title>
 
-			{
-				errorMsg !== '' && (
-					<Message color="danger">
-						<Message.Body>
-							{errorMsg}
-						</Message.Body>
-					</Message>
-				)
-			}
-
 			<form onSubmit={handleFormSubmit}>
-				<Field>
-					<Label>Minecraft username:</Label>
-					<Control>
-						<Input type="text" value={username} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}/>
-					</Control>
-				</Field>
-
-				<Field>
-					<Label>Email:</Label>
-					<Control>
-						<Input required type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
-					</Control>
-				</Field>
-
-				<Field>
-					<Label>Is member:</Label>
-					<Control>
-						<Checkbox checked={isMember || isOfficer} disabled={isOfficer} onChange={() => setIsMember(s => !s)}/>
-					</Control>
-				</Field>
-
-				<Field>
-					<Label>Is officer:</Label>
-					<Control>
-						<Checkbox checked={isOfficer} onChange={() => setIsOfficer(s => !s)}/>
-					</Control>
-				</Field>
-
-				<FormActions loading={loading} onCancel={() => router.back()}/>
+				<ModelEdit fields={fields} loading={loading} backHref="/admin/users" errorMsg={errorMsg} onChange={handleFieldChange}/>
 			</form>
 		</Container>
 	);

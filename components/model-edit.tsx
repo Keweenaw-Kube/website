@@ -8,6 +8,7 @@ interface IField {
 	name: string;
 	type: string;
 	required?: boolean;
+	disabled?: boolean;
 }
 
 interface IStringField extends IField {
@@ -36,19 +37,19 @@ const renderField = (field: IFieldDefinition, onChange: (v: string | boolean) =>
 	switch (field.type) {
 		case 'textarea':
 			return (
-				<Textarea value={field.value} required={field.required} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
+				<Textarea value={field.value} required={field.required} disabled={field.disabled} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
 			);
 		case 'checkbox':
 			return (
-				<Checkbox checked={field.value} onChange={() => onChange(!field.value)}/>
+				<Checkbox checked={field.value} disabled={field.disabled} onChange={() => onChange(!field.value)}/>
 			);
 		case 'email':
 			return (
-				<Input type="email" value={field.value} required={field.required} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
+				<Input type="email" value={field.value} required={field.required} disabled={field.disabled} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
 			);
 		default:
 			return (
-				<Input type="text" value={field.value} required={field.required} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
+				<Input type="text" value={field.value} required={field.required} disabled={field.disabled} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
 			);
 	}
 };

@@ -60,7 +60,7 @@ export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextA
 		jwt.verify(token, SIGNING_SECRET, {}, async (error, decoded) => {
 			if (error) {
 				res.status(401).end();
-				return reject();
+				return;
 			}
 
 			const {email} = (decoded as {email: string});
@@ -69,12 +69,12 @@ export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextA
 
 			if (!user) {
 				res.status(401).end();
-				return reject();
+				return;
 			}
 
 			if (limitToOfficer && !user.isOfficer) {
 				res.status(401).end();
-				return reject();
+				return;
 			}
 
 			next();
