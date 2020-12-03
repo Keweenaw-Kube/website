@@ -76,7 +76,7 @@ export class APIClient {
 	}
 
 	async createUser(user: Except<IUser, 'id'>) {
-		return this.getData<IUser>(this.client.post('api/users'));
+		return this.getData<IUser>(this.client.post('api/users', {json: user}));
 	}
 
 	async getMojangNameHistory(uuid: string) {
