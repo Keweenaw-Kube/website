@@ -5,7 +5,7 @@ import {Title, Container, Box, Block, Field, Label, Control, Input, Textarea, Bu
 import {IServer} from '../../../lib/types';
 import {privateRoute} from '../../../components/private-route';
 import {useAPI} from '../../../components/api-client-context';
-import ModelEdit from '../../../components/model-edit';
+import ModelEdit, {IFieldDefinition} from '../../../components/model-edit';
 import {APIClient} from '../../../lib/api-client';
 
 const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
@@ -33,24 +33,26 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 		await router.replace('/admin/servers');
 	};
 
-	const handleFieldChange = (name: string, value: string) => setServer(s => ({...s, [name]: value}));
+	const handleFieldChange = (name: string, value: string | boolean) => setServer(s => ({...s, [name]: value}));
 
-	const fields = [
+	const fields: IFieldDefinition[] = [
 		{
 			label: 'Name',
 			name: 'name',
-			value: server.name
+			value: server.name,
+			type: 'input'
 		},
 		{
 			label: 'Domain',
 			name: 'domain',
-			value: server.domain
+			value: server.domain,
+			type: 'input'
 		},
 		{
 			label: 'Description',
 			name: 'description',
 			value: server.description,
-			type: 'textarea' as const
+			type: 'textarea'
 		}
 	];
 

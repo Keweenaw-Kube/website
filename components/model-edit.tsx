@@ -1,40 +1,85 @@
 import React from 'react';
-import {Field, Label, Control, Textarea, Input, Button} from 'rbx';
+import {Field, Label, Control, Textarea, Input, Button, Message, Checkbox} from 'rbx';
 import {useRouter} from 'next/router';
 import FormActions from './form-actions';
 
-type TInputType = 'input' | 'textarea';
+interface IField {
+	label: string;
+	name: string;
+	type: string;
+	required?: boolean;
+}
 
-const WrappedField = ({label, value, onChange, as}: {label: string; value: string; onChange: (v: string) => void; as?: TInputType}) => (
+interface IStringField extends IField {
+	value: string;
+	type: 'input';
+}
+
+interface IEmailField extends IField {
+	value: string;
+	type: 'email';
+}
+
+interface ITextareaField extends IField {
+	value: string;
+	type: 'textarea';
+}
+
+interface ICheckboxField extends IField {
+	value: boolean;
+	type: 'checkbox';
+}
+
+export type IFieldDefinition = IStringField | IEmailField | ITextareaField | ICheckboxField;
+
+const renderField = (field: IFieldDefinition, onChange: (v: string | boolean) => void) => {
+	switch (field.type) {
+		case 'textarea':
+			return (
+				<Textarea value={field.value} required={field.required} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
+			);
+		case 'checkbox':
+			return (
+				<Checkbox checked={field.value} onChange={() => onChange(!field.value)}/>
+			);
+		case 'email':
+			return (
+				<Input type="email" value={field.value} required={field.required} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
+			);
+		default:
+			return (
+				<Input type="text" value={field.value} required={field.required} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
+			);
+	}
+};
+
+const WrappedField = ({field, onChange}: {field: IFieldDefinition; onChange: (v: string | boolean) => void}) => (
 	<Field>
-		<Label>{label}</Label>
+		<Label>{field.label}</Label>
 		<Control>
-			{
-				as === 'textarea' ? (
-					<Textarea value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
-				) : (
-					<Input type="text" value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}/>
-				)
-			}
+			{renderField(field, onChange)}
 		</Control>
 	</Field>
 );
 
-interface IFieldDefinition {
-	label: string;
-	name: string;
-	value: string;
-	type?: TInputType;
-}
-
-const ModelEdit = ({fields = [], onChange, loading = false, backHref, onCancel = () => { /* default value */ }, onDelete}: {fields: IFieldDefinition[]; onChange: (name: string, value: string) => void; loading: boolean; backHref?: string; onCancel?: () => void; onDelete?: () => void}) => {
+const ModelEdit = ({fields = [], onChange, loading = false, backHref, onCancel = () => { /* default value */ }, onDelete, errorMsg = ''}: {fields: IFieldDefinition[]; onChange: (name: string, value: string | boolean) => void; loading: boolean; backHref?: string; onCancel?: () => void; onDelete?: () => void; errorMsg?: string}) => {
 	const router = useRouter();
 
 	return (
 		<>
 			{
+				errorMsg !== '' && (
+					<Message color="danger">
+						<Message.Body>
+							{errorMsg}
+						</Message.Body>
+					</Message>
+				)
+			}
+
+			{
 				fields.map(field => (
-					<WrappedField key={field.name} label={field.label} value={field.value} as={field.type} onChange={v => onChange(field.name, v)}/>
+					<WrappedField key={field.name} field={field} onChange={v => onChange(field.name, v)}/>
 				))
 			}
 

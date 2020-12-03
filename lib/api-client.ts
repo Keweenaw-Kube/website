@@ -83,6 +83,14 @@ export class APIClient {
 		return this.getData<IUser>(this.client.get(`api/users/${id}`));
 	}
 
+	async putUser(id: number, user: Except<IUser, 'minecraftUUID'>) {
+		await this.getData(this.client.put(`api/users/${id}`, {json: this.removeId(user)}));
+	}
+
+	async deleteUser(id: number) {
+		await this.client.delete(`api/users/${id}`);
+	}
+
 	private async getData<T>(req: ResponsePromise): Promise<T> {
 		const res = await req;
 

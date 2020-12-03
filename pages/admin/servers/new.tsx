@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Container, Block, Title} from 'rbx';
 import {useRouter} from 'next/router';
 import {IServer} from '../../../lib/types';
-import ModelEdit from '../../../components/model-edit';
+import ModelEdit, {IFieldDefinition} from '../../../components/model-edit';
 import {useAPI} from '../../../components/api-client-context';
 
 const NewServer = () => {
@@ -11,22 +11,24 @@ const NewServer = () => {
 	const [server, setServer] = useState<IServer>({id: -1, name: '', domain: '', description: ''});
 	const {client} = useAPI();
 
-	const fields = [
+	const fields: IFieldDefinition[] = [
 		{
 			label: 'Name',
 			name: 'name',
-			value: server.name
+			value: server.name,
+			type: 'input'
 		},
 		{
 			label: 'Domain',
 			name: 'domain',
-			value: server.domain
+			value: server.domain,
+			type: 'input'
 		},
 		{
 			label: 'Description',
 			name: 'description',
 			value: server.description,
-			type: 'textarea' as const
+			type: 'textarea'
 		}
 	];
 
@@ -43,7 +45,7 @@ const NewServer = () => {
 		await router.push('/admin/servers');
 	};
 
-	const handleFieldChange = (name: string, value: string) => setServer(s => ({...s, [name]: value}));
+	const handleFieldChange = (name: string, value: string | boolean) => setServer(s => ({...s, [name]: value}));
 
 	return (
 		<Container>
