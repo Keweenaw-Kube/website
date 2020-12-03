@@ -11,38 +11,18 @@ const NewUser = () => {
 	const [loading, setLoading] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 	const [username, setUsername] = useState('');
-	const [uuid, setUUID] = useState('');
 	const [email, setEmail] = useState('');
 	const [isMember, setIsMember] = useState(false);
 	const [isOfficer, setIsOfficer] = useState(false);
 
-	const handleUsernameCheck = async () => {
-		if (username === '') {
-			setErrorMsg('Username was not provided.');
-			return;
-		}
+	const handleFormSubmit = async (event: React.FormEvent) => {
+		event.preventDefault();
 
-		setLoading(true);
-
-		const profiles = await client.getMojangProfile(username);
-
-		if (profiles.length > 0) {
-			setUUID(profiles[0].id);
-			setErrorMsg('');
-		} else {
-			setErrorMsg('User was not found.');
-		}
-
-		setLoading(false);
-	};
-
-	const handleSave = async () => {
 		setLoading(true);
 
 		try {
 			await client.createUser({
 				email,
-				minecraftUUID: uuid,
 				minecraftUsername: username,
 				isOfficer,
 				isMember,
@@ -57,12 +37,6 @@ const NewUser = () => {
 		} finally {
 			setLoading(false);
 		}
-	};
-
-	const handleFormSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
-
-		await (uuid === '' ? handleUsernameCheck() : handleSave());
 	};
 
 	useEffect(() => {
@@ -91,40 +65,32 @@ const NewUser = () => {
 				<Field>
 					<Label>Minecraft username:</Label>
 					<Control>
-						<Input type="text" value={username} disabled={uuid !== ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}/>
+						<Input type="text" value={username} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}/>
 					</Control>
 				</Field>
 
-				{
-					uuid === '' ? (
-						<Button color="primary" state={loading ? 'loading' : undefined}>Check username</Button>
-					) : (
-						<>
-							<Field>
-								<Label>Email:</Label>
-								<Control>
-									<Input required type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
-								</Control>
-							</Field>
+				<Field>
+					<Label>Email:</Label>
+					<Control>
+						<Input required type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
+					</Control>
+				</Field>
 
-							<Field>
-								<Label>Is member:</Label>
-								<Control>
-									<Checkbox checked={isMember || isOfficer} disabled={isOfficer} onChange={() => setIsMember(s => !s)}/>
-								</Control>
-							</Field>
+				<Field>
+					<Label>Is member:</Label>
+					<Control>
+						<Checkbox checked={isMember || isOfficer} disabled={isOfficer} onChange={() => setIsMember(s => !s)}/>
+					</Control>
+				</Field>
 
-							<Field>
-								<Label>Is officer:</Label>
-								<Control>
-									<Checkbox checked={isOfficer} onChange={() => setIsOfficer(s => !s)}/>
-								</Control>
-							</Field>
+				<Field>
+					<Label>Is officer:</Label>
+					<Control>
+						<Checkbox checked={isOfficer} onChange={() => setIsOfficer(s => !s)}/>
+					</Control>
+				</Field>
 
-							<FormActions loading={loading} onCancel={() => router.back()}/>
-						</>
-					)
-				}
+				<FormActions loading={loading} onCancel={() => router.back()}/>
 			</form>
 		</Container>
 	);

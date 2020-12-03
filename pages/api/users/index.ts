@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import nc from 'next-connect';
 import prisma from '../lib/db';
 import {authMiddleware} from '../lib/auth';
+import {getProfileByName} from '../lib/mojang';
 
 export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
@@ -17,6 +18,16 @@ export default nc()
 			res.status(400).json({error: 'Email already exists'});
 			return;
 		}
+
+		// Look up Mojang username
+		const profiles = await getProfileByName(request.body.minecraftUsername);
+
+		if (profiles.length === 0) {
+			res.status(400).json({error: 'Minecraft user does not exist'});
+			return;
+		}
+
+		request.body.minecraftUUID = profiles[0].id;
 
 		try {
 			const user = await prisma.user.create({

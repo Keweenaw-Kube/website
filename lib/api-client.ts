@@ -75,16 +75,12 @@ export class APIClient {
 		await this.client.delete(`api/servers/${id}`);
 	}
 
-	async createUser(user: Except<IUser, 'id'>) {
+	async createUser(user: Except<Except<IUser, 'id'>, 'minecraftUUID'>) {
 		return this.getData<IUser>(this.client.post('api/users', {json: user}));
 	}
 
-	async getMojangNameHistory(uuid: string) {
-		return this.getData<IMojangName[]>(this.client.get('api/mojang/profiles', {searchParams: {uuid}}));
-	}
-
-	async getMojangProfile(name: string) {
-		return this.getData<IMojangUser[]>(this.client.get('api/mojang/profiles', {searchParams: {name}}));
+	async getUser(id: number) {
+		return this.getData<IUser>(this.client.get(`api/users/${id}`));
 	}
 
 	private async getData<T>(req: ResponsePromise): Promise<T> {
