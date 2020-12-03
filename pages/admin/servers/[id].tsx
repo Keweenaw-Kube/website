@@ -9,10 +9,9 @@ import ModelEdit from '../../../components/model-edit';
 import {APIClient} from '../../../lib/api-client';
 
 const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
+	const router = useRouter();
 	const [server, setServer] = useState(propsServer);
 	const [loading, setLoading] = useState(false);
-
-	const router = useRouter();
 
 	const {client} = useAPI();
 
@@ -24,7 +23,14 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 		setLoading(true);
 		await client.putServer(server.id, server);
 		setLoading(false);
-		router.back();
+	};
+
+	const handleDelete = async () => {
+		setLoading(true);
+		await client.deleteServer(server.id);
+		setLoading(false);
+
+		await router.replace('/admin/servers');
 	};
 
 	const handleFieldChange = (name: string, value: string) => setServer(s => ({...s, [name]: value}));
@@ -55,7 +61,7 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 			<Title size={1}>Edit</Title>
 
 			<form onSubmit={handleSubmit}>
-				<ModelEdit fields={fields} loading={loading} backHref="/admin/servers" onChange={handleFieldChange}/>
+				<ModelEdit fields={fields} loading={loading} backHref="/admin/servers" onChange={handleFieldChange} onDelete={handleDelete}/>
 			</form>
 		</Container>
 	);
@@ -67,6 +73,8 @@ EditServer.getInitialProps = async context => {
 	const client = new APIClient(context);
 
 	const server = await client.getServer(id);
+
+	// TODO: handle 404s properly
 
 	return {server};
 };

@@ -6,15 +6,15 @@ import {privateRoute} from '../../components/private-route';
 
 const LINKS = [
 	{
-		label: 'Edit servers',
+		label: 'Servers',
 		href: '/admin/servers'
 	},
 	{
-		label: 'Edit users',
+		label: 'Users',
 		href: '/admin/users'
 	},
 	{
-		label: 'Edit pictures',
+		label: 'Pictures',
 		href: '/admin/pictures'
 	}
 ];

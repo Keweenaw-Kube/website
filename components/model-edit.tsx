@@ -27,7 +27,7 @@ interface IFieldDefinition {
 	type?: TInputType;
 }
 
-const ModelEdit = ({fields = [], onChange, loading = false, backHref, onCancel = () => { /* default value */ }}: {fields: IFieldDefinition[]; onChange: (name: string, value: string) => void; loading: boolean; backHref?: string; onCancel?: () => void}) => {
+const ModelEdit = ({fields = [], onChange, loading = false, backHref, onCancel = () => { /* default value */ }, onDelete}: {fields: IFieldDefinition[]; onChange: (name: string, value: string) => void; loading: boolean; backHref?: string; onCancel?: () => void; onDelete?: () => void}) => {
 	const router = useRouter();
 
 	return (
@@ -38,7 +38,7 @@ const ModelEdit = ({fields = [], onChange, loading = false, backHref, onCancel =
 				))
 			}
 
-			<FormActions loading={loading} onCancel={backHref ? async () => router.push(backHref) : onCancel}/>
+			<FormActions loading={loading} onCancel={backHref ? async () => router.push(backHref) : onCancel} onDelete={onDelete}/>
 		</>
 	);
 };
