@@ -9,7 +9,10 @@ import ModelTable from '../../../components/model-table';
 import {IUser} from '../../../lib/types';
 
 const UsersPage = () => {
+	const {client} = useAPI();
 	const users = useAPIRoute<IUser[]>('/api/users');
+
+	const myEmail = client.token.decodedToken.email;
 
 	return (
 		<ModelTable
@@ -31,7 +34,7 @@ const UsersPage = () => {
 					<Table.Cell>{user.isBanned ? 'Yes' : 'No'}</Table.Cell>
 					<Table.Cell>
 						<Link passHref href={`/admin/users/${user.id}`}>
-							<Button color="warning" as="a">
+							<Button color="warning" as="a" disabled={user.email === myEmail} style={user.email === myEmail ? ({pointerEvents: 'none'}) : ({})}>
 								<Icon size="small">
 									<FontAwesomeIcon icon={faPen} color="black"/>
 								</Icon>
