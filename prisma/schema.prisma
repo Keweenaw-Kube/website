@@ -8,13 +8,16 @@ datasource db {
 }
 
 model Picture {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  serverId  Int
-  path      String
-  createdAt DateTime @default(now())
-  server    Server   @relation(fields: [serverId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  serverId    Int
+  path        String
+  width       Int
+  height      Int
+  isApproved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  server      Server   @relation(fields: [serverId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 model Server {

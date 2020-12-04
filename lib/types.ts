@@ -31,3 +31,13 @@ export interface IMojangUser {
 	legacy?: boolean;
 	demo?: boolean;
 }
+
+export interface IPicture {
+	id: number;
+	userId: number;
+	serverId: number;
+	path: string;
+	width: number;
+	height: number;
+	isApproved: boolean;
+}

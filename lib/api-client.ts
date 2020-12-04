@@ -3,7 +3,7 @@ import ky from 'ky/umd';
 import {Options, ResponsePromise} from 'ky';
 import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
-import {IServer, IRole, IMojangName, IMojangUser, IUser} from './types';
+import {IServer, IRole, IMojangName, IMojangUser, IUser, IPicture} from './types';
 import {getBaseURL} from './helpers';
 
 interface IAPIResponse<T> {
@@ -13,6 +13,12 @@ interface IAPIResponse<T> {
 
 interface ILoginResponse {
 	token: string;
+}
+
+interface IUploadResponse {
+	path: string;
+	width: number;
+	height: number;
 }
 
 export class APIClient {
@@ -30,7 +36,8 @@ export class APIClient {
 			},
 			prefixUrl: '/',
 			throwHttpErrors: false,
-			retry: 0
+			retry: 0,
+			timeout: 20000
 		};
 
 		if (option.constructor !== AuthToken) {
@@ -89,6 +96,18 @@ export class APIClient {
 
 	async deleteUser(id: number) {
 		await this.client.delete(`api/users/${id}`);
+	}
+
+	async uploadPicture(file: File) {
+		const form = new FormData();
+
+		form.append('file', file);
+
+		return this.getData<IUploadResponse>(this.client.post('api/pictures/upload', {body: form}));
+	}
+
+	async createPicture(picture: Except<IPicture, 'id'>) {
+		return this.getData<IPicture>(this.client.post('api/pictures', {json: picture}));
 	}
 
 	private async getData<T>(req: ResponsePromise): Promise<T> {

@@ -2,6 +2,7 @@ import React from 'react';
 import {Field, Label, Control, Textarea, Input, Button, Message, Checkbox} from 'rbx';
 import {useRouter} from 'next/router';
 import FormActions from './form-actions';
+import FormError from './form-error';
 
 interface IField {
 	label: string;
@@ -68,15 +69,7 @@ const ModelEdit = ({fields = [], onChange, loading = false, backHref, onCancel =
 
 	return (
 		<>
-			{
-				errorMsg !== '' && (
-					<Message color="danger">
-						<Message.Body>
-							{errorMsg}
-						</Message.Body>
-					</Message>
-				)
-			}
+			<FormError error={errorMsg}/>
 
 			{
 				fields.map(field => (
