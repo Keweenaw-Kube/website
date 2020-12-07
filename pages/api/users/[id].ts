@@ -61,6 +61,9 @@ export default nc()
 	.delete(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = parseId(request);
 
+		// https://github.com/prisma/migrate/issues/249
+		await prisma.picture.deleteMany({where: {userId: id}});
+
 		await prisma.user.delete({
 			where: {
 				id

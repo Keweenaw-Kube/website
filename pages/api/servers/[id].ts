@@ -38,12 +38,15 @@ export default nc()
 	.delete(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = parseId(request);
 
+		// https://github.com/prisma/migrate/issues/249
+		await prisma.picture.deleteMany({where: {serverId: id}});
+
 		await prisma.server.delete({
 			where: {
 				id
 			}
 		});
 
-		res.json({});
+		res.status(200).json({});
 	});
 
