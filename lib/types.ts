@@ -3,6 +3,7 @@ export interface IServer {
 	name: string;
 	description: string;
 	domain: string;
+	limitToMembers: boolean;
 }
 
 export interface IRole {

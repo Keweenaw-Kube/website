@@ -8,7 +8,7 @@ import {useAPI} from '../../../components/api-client-context';
 const NewServer = () => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
-	const [server, setServer] = useState<IServer>({id: -1, name: '', domain: '', description: ''});
+	const [server, setServer] = useState<IServer>({id: -1, name: '', domain: '', description: '', limitToMembers: false});
 	const {client} = useAPI();
 
 	const fields: IFieldDefinition[] = [
@@ -29,6 +29,12 @@ const NewServer = () => {
 			name: 'description',
 			value: server.description,
 			type: 'textarea'
+		},
+		{
+			label: 'Limit to members',
+			name: 'limitToMembers',
+			value: server.limitToMembers,
+			type: 'checkbox'
 		}
 	];
 

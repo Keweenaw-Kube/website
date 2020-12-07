@@ -23,6 +23,8 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 		setLoading(true);
 		await client.putServer(server.id, server);
 		setLoading(false);
+
+		await router.push('/admin/servers');
 	};
 
 	const handleDelete = async () => {
@@ -53,6 +55,12 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 			name: 'description',
 			value: server.description,
 			type: 'textarea'
+		},
+		{
+			label: 'Limit to members',
+			name: 'limitToMembers',
+			value: server.limitToMembers,
+			type: 'checkbox'
 		}
 	];
 
