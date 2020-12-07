@@ -1,0 +1,34 @@
+.suggestionsContainer {
+  display: none;
+}
+
+.suggestionsContainerOpen {
+  display: block;
+  border: 1px solid rgb(219, 219, 219);
+  font-weight: 300;
+  z-index: 2;
+  overflow-y: auto;
+  max-height: 30rem;
+  width: calc(20rem + 2px);
+  position: absolute;
+  background: white;
+}
+
+.input {
+  width: 20rem;
+}
+
+.suggestionsList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.suggestion {
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.suggestionHighlighted {
+  background-color: whitesmoke;
+}

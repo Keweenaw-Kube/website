@@ -5,12 +5,12 @@ import {authMiddleware} from '../lib/auth';
 import {getProfileByName} from '../lib/mojang';
 
 export default nc()
+	.use(authMiddleware({limitToOfficer: true}))
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
 		const users = await prisma.user.findMany({orderBy: {email: 'asc'}});
 
 		res.status(200).json({data: users});
 	})
-	.use(authMiddleware({limitToOfficer: true}))
 	.post(async (request: NextApiRequest, res: NextApiResponse) => {
 		const u = await prisma.user.findOne({where: {email: request.body.email}});
 

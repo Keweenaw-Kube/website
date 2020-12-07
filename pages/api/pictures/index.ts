@@ -11,13 +11,15 @@ export default nc()
 	})
 	.use(authMiddleware({limitToOfficer: true}))
 	.post(async (request: NextApiRequest, res: NextApiResponse) => {
-		const {path, height, width, serverId, userId} = request.body;
+		const {path, height, width, serverId, userId, isApproved, caption} = request.body;
 
 		const picture = await prisma.picture.create({
 			data: {
 				path,
 				height,
 				width,
+				isApproved,
+				caption,
 				server: {
 					connect: {id: serverId}
 				},

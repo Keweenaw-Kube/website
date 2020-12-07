@@ -40,4 +40,5 @@ export interface IPicture {
 	width: number;
 	height: number;
 	isApproved: boolean;
+	caption: string;
 }
