@@ -1,5 +1,6 @@
 import React, {useState, useMemo} from 'react';
 import {useRouter} from 'next/router';
+import Image from 'next/image';
 import {Container, Block, Title, File, Field, Input, Label, Control} from 'rbx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUpload} from '@fortawesome/free-solid-svg-icons';
@@ -8,15 +9,17 @@ import FormError from '../../../components/form-error';
 import {useAPI} from '../../../components/api-client-context';
 import {privateRoute} from '../../../components/private-route';
 import ObjectAutosuggestSelector from '../../../components/object-autosuggest-selector';
-import {IUser, IServer} from '../../../lib/types';
+import {IUser, IServer, IPicture} from '../../../lib/types';
+import {APIClient, IPictureWithRelations} from '../../../lib/api-client';
+import {NextPage} from 'next';
 
-const AddPicture = () => {
+const EditPicture: NextPage<{picture: IPictureWithRelations}> = ({picture: propsPicture}) => {
 	const {client} = useAPI();
 	const router = useRouter();
 	const [file, setFile] = useState<File>();
-	const [user, setUser] = useState<IUser>();
-	const [server, setServer] = useState<IServer>();
-	const [caption, setCaption] = useState('');
+	const [user, setUser] = useState<IUser>(propsPicture.user);
+	const [server, setServer] = useState<IServer>(propsPicture.server);
+	const [caption, setCaption] = useState(propsPicture.caption);
 	const [loading, setLoading] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
 
@@ -32,11 +35,6 @@ const AddPicture = () => {
 		event.preventDefault();
 
 		// Validate
-		if (!file) {
-			setErrorMsg('No file was provided.');
-			return;
-		}
-
 		if (!user) {
 			setErrorMsg('User was not selected.');
 			return;
@@ -49,14 +47,20 @@ const AddPicture = () => {
 
 		setLoading(true);
 		try {
-			const {path, height, width} = await client.uploadPicture(file);
-			await client.createPicture({
+			let {path, height, width} = propsPicture;
+
+			if (file) {
+				({path, height, width} = await client.uploadPicture(file));
+			}
+
+			await client.putPicture(propsPicture.id, {
+				id: propsPicture.id,
 				userId: user.id,
 				serverId: server.id,
 				path,
 				height,
 				width,
-				isApproved: true,
+				isApproved: propsPicture.isApproved,
 				caption
 			});
 
@@ -70,11 +74,19 @@ const AddPicture = () => {
 		setLoading(false);
 	};
 
+	const handleDelete = async () => {
+		setLoading(true);
+		await client.deletePicture(propsPicture.id);
+		setLoading(false);
+
+		await router.replace('/admin/pictures');
+	};
+
 	return (
 		<Container>
 			<Block/>
 
-			<Title size={1}>Add a picture</Title>
+			<Title size={1}>Edit picture</Title>
 
 			<FormError error={errorMsg}/>
 
@@ -96,13 +108,12 @@ const AddPicture = () => {
 					</File>
 				</Field>
 
-				{previewURL && (
-					<Field>
-						<div style={{height: '30vh', width: '30vh'}}>
-							{previewURL && <img src={previewURL} style={{maxHeight: '100%', maxWidth: '100%'}}/>}
-						</div>
-					</Field>
-				)}
+				<Field>
+					<div style={{height: '30vh', width: '30vh', position: 'relative'}}>
+						{!previewURL && <Image src={propsPicture.path} layout="fill" objectFit="contain"/>}
+						{previewURL && <img src={previewURL} style={{maxHeight: '100%', maxWidth: '100%'}}/>}
+					</div>
+				</Field>
 
 				<ObjectAutosuggestSelector
 					label="User:"
@@ -140,10 +151,22 @@ const AddPicture = () => {
 					</Control>
 				</Field>
 
-				<FormActions loading={loading} onCancel={async () => router.push('/admin/pictures')}/>
+				<FormActions loading={loading} onCancel={async () => router.push('/admin/pictures')} onDelete={handleDelete}/>
 			</form>
 		</Container>
 	);
 };
 
-export default privateRoute(AddPicture);
+EditPicture.getInitialProps = async context => {
+	const id = Number.parseInt((context.query.id as string), 10);
+
+	const client = new APIClient(context);
+
+	const picture = await client.getPicture(id);
+
+	// TODO: handle 404s properly
+
+	return {picture};
+};
+
+export default privateRoute<{picture: IPictureWithRelations}>(EditPicture);

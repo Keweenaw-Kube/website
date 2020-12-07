@@ -3,8 +3,7 @@ import nc from 'next-connect';
 import prisma from '../lib/db';
 import {authMiddleware} from '../lib/auth';
 import {getProfileByName} from '../lib/mojang';
-
-const parseId = (request: NextApiRequest) => Number.parseInt(request.query.id as string, 10);
+import {parseId} from '../lib/parse-params';
 
 export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {

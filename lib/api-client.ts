@@ -21,6 +21,11 @@ interface IUploadResponse {
 	height: number;
 }
 
+export interface IPictureWithRelations extends IPicture {
+	user: IUser;
+	server: IServer;
+}
+
 export class APIClient {
 	readonly token: AuthToken;
 	private readonly client: typeof ky;
@@ -71,7 +76,7 @@ export class APIClient {
 	}
 
 	async putServer(id: number, server: IServer) {
-		await this.client.put(`api/servers/${id}`, {json: this.removeId(server)});
+		await this.getData(this.client.put(`api/servers/${id}`, {json: this.removeId(server)}));
 	}
 
 	async createServer(server: Except<IServer, 'id'>) {
@@ -79,7 +84,7 @@ export class APIClient {
 	}
 
 	async deleteServer(id: number) {
-		await this.client.delete(`api/servers/${id}`);
+		await this.getData(this.client.delete(`api/servers/${id}`));
 	}
 
 	async createUser(user: Except<Except<IUser, 'id'>, 'minecraftUUID'>) {
@@ -95,7 +100,7 @@ export class APIClient {
 	}
 
 	async deleteUser(id: number) {
-		await this.client.delete(`api/users/${id}`);
+		await this.getData(this.client.delete(`api/users/${id}`));
 	}
 
 	async uploadPicture(file: File) {
@@ -108,6 +113,18 @@ export class APIClient {
 
 	async createPicture(picture: Except<IPicture, 'id'>) {
 		return this.getData<IPicture>(this.client.post('api/pictures', {json: picture}));
+	}
+
+	async deletePicture(id: number) {
+		await this.getData(this.client.delete(`api/pictures/${id}`));
+	}
+
+	async putPicture(id: number, picture: IPicture) {
+		await this.getData(this.client.put(`api/pictures/${id}`, {json: this.removeId(picture)}));
+	}
+
+	async getPicture(id: number) {
+		return this.getData<IPictureWithRelations>(this.client.get(`api/pictures/${id}`));
 	}
 
 	private async getData<T>(req: ResponsePromise): Promise<T> {

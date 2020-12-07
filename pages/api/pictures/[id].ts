@@ -8,28 +8,45 @@ export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = parseId(request);
 
-		const server = await prisma.server.findOne({
+		const picture = await prisma.picture.findOne({
 			where: {
 				id
+			},
+			include: {
+				user: true,
+				server: true
 			}
 		});
 
-		if (!server) {
+		if (!picture) {
 			res.status(404).json({error: 'Not found'});
 			return;
 		}
 
-		res.json({data: server});
+		res.json({data: picture});
 	})
 	.use(authMiddleware({limitToOfficer: true}))
 	.put(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = parseId(request);
+		const {path, height, width, serverId, userId, isApproved, caption} = request.body;
 
-		await prisma.server.update({
+		await prisma.picture.update({
 			where: {
 				id
 			},
-			data: request.body
+			data: {
+				path,
+				height,
+				width,
+				isApproved,
+				caption,
+				server: {
+					connect: {id: serverId}
+				},
+				user: {
+					connect: {id: userId}
+				}
+			}
 		});
 
 		res.json({});
@@ -37,14 +54,7 @@ export default nc()
 	.delete(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = parseId(request);
 
-		// https://github.com/prisma/migrate/issues/249
-		await prisma.picture.deleteMany({where: {serverId: id}});
-
-		await prisma.server.delete({
-			where: {
-				id
-			}
-		});
+		await prisma.picture.delete({where: {id}});
 
 		res.status(200).json({});
 	});

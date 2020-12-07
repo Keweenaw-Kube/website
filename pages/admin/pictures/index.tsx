@@ -1,8 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
-import {Title, Container, Box, Block, Table, Button, Icon, Progress, Column, Tag} from 'rbx';
+import Link from 'next/link';
+import {Table, Button, Icon, Tag} from 'rbx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faPen} from '@fortawesome/free-solid-svg-icons';
 import {privateRoute} from '../../../components/private-route';
 import {useAPIRoute} from '../../../components/api-client-context';
 import ModelTable from '../../../components/model-table';
@@ -27,7 +28,7 @@ const PicturesPage = () => {
 			addHref="/admin/pictures/new"
 			data={pictures}
 			loading={pictures === undefined}
-			headerLabels={['Preview', 'Status', 'Edit']}
+			headerLabels={['Preview', 'Caption', 'Status', 'Edit']}
 			renderRow={picture => (
 				<Table.Row key={picture.id}>
 					<Table.Cell>
@@ -35,15 +36,21 @@ const PicturesPage = () => {
 					</Table.Cell>
 
 					<Table.Cell style={{verticalAlign: 'middle'}}>
+						{picture.caption}
+					</Table.Cell>
+
+					<Table.Cell style={{verticalAlign: 'middle'}}>
 						<Tag color={picture.isApproved ? 'success' : 'light'}>{picture.isApproved ? 'Approved' : 'Pending approval'}</Tag>
 					</Table.Cell>
 
 					<Table.Cell style={{verticalAlign: 'middle'}}>
-						<Button color="warning">
-							<Icon size="small">
-								<FontAwesomeIcon icon={faPen} color="black"/>
-							</Icon>
-						</Button>
+						<Link passHref href={`/admin/pictures/${picture.id}`}>
+							<Button color="warning" as="a">
+								<Icon size="small">
+									<FontAwesomeIcon icon={faPen} color="black"/>
+								</Icon>
+							</Button>
+						</Link>
 					</Table.Cell>
 				</Table.Row>
 			)}
