@@ -33,6 +33,7 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 
 		// Issue new JWT
 		const token = signObject({
+			id: user.id,
 			isMember: user.isMember,
 			isOfficer: user.isOfficer,
 			picture: decoded.picture,

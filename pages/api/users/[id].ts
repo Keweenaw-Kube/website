@@ -1,13 +1,19 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import nc from 'next-connect';
 import prisma from '../lib/db';
-import {authMiddleware} from '../lib/auth';
+import {authMiddleware, IRequestWithUser} from '../lib/auth';
 import {getProfileByName} from '../lib/mojang';
 import {parseId} from '../lib/parse-params';
 
 export default nc()
-	.get(async (request: NextApiRequest, res: NextApiResponse) => {
+	.use(authMiddleware({limitToOfficer: false}))
+	.get(async (request: IRequestWithUser, res: NextApiResponse) => {
 		const id = parseId(request);
+
+		if (request.user.id !== id && !request.user.isOfficer) {
+			res.status(401).json({error: 'Unauthorized'});
+			return;
+		}
 
 		const user = await prisma.user.findOne({
 			where: {
@@ -22,9 +28,13 @@ export default nc()
 
 		res.json({data: user});
 	})
-	.use(authMiddleware({limitToOfficer: true}))
-	.put(async (request: NextApiRequest, res: NextApiResponse) => {
+	.put(async (request: IRequestWithUser, res: NextApiResponse) => {
 		const id = parseId(request);
+
+		if (request.user.id !== id && !request.user.isOfficer) {
+			res.status(401).json({error: 'Unauthorized'});
+			return;
+		}
 
 		// Check email
 		const u = await prisma.user.findOne({where: {email: request.body.email}});
@@ -57,8 +67,13 @@ export default nc()
 
 		res.json({});
 	})
-	.delete(async (request: NextApiRequest, res: NextApiResponse) => {
+	.delete(async (request: IRequestWithUser, res: NextApiResponse) => {
 		const id = parseId(request);
+
+		if (request.user.id !== id && !request.user.isOfficer) {
+			res.status(401).json({error: 'Unauthorized'});
+			return;
+		}
 
 		// https://github.com/prisma/migrate/issues/249
 		await prisma.picture.deleteMany({where: {userId: id}});
