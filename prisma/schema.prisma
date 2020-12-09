@@ -42,3 +42,10 @@ model User {
   isBanned          Boolean     @default(false)
   pictures          Picture[]
 }
+
+model WhitelistToken {
+  id            Int         @id @default(autoincrement())
+  code          String      @default("")
+  minecraftUUID String      @default("")
+  createdAt     DateTime    @default(now())
+}

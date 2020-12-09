@@ -127,6 +127,10 @@ export class APIClient {
 		return this.getData<IPictureWithRelations>(this.client.get(`api/pictures/${id}`));
 	}
 
+	async linkMinecraftAccount(code: string) {
+		return this.getData<void>(this.client.post('api/whitelist', {json: {code}}));
+	}
+
 	private async getData<T>(req: ResponsePromise): Promise<T> {
 		const res = await req;
 

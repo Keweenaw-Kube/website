@@ -18,6 +18,7 @@
     "busboy": "^0.3.1",
     "butter-toast": "^3.3.5",
     "cloudinary": "^1.23.0",
+    "copy-to-clipboard": "^3.3.1",
     "got": "^11.8.0",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
@@ -33,6 +34,7 @@
     "react-autosuggest": "^10.0.4",
     "react-dom": "17.0.1",
     "react-google-login": "^5.1.22",
+    "secure-pin": "^1.0.14",
     "semver": "^7.3.2",
     "swr": "^0.3.8"
   },

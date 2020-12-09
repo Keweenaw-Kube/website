@@ -2,6 +2,7 @@ import jwt, {JwtHeader, SigningKeyCallback} from 'jsonwebtoken';
 import jwk from 'jwks-rsa';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {NextHandler} from 'next-connect';
+import {IUser} from '../../../lib/types';
 import {SIGNING_SECRET} from './config';
 import prisma from './db';
 
@@ -48,6 +49,10 @@ const getToken = (request: NextApiRequest): string | null => {
 	return null;
 };
 
+export interface IRequestWithUser extends NextApiRequest {
+	user: IUser;
+}
+
 export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
 	const token = getToken(request);
 
@@ -76,6 +81,8 @@ export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextA
 				res.status(401).end();
 				return;
 			}
+
+			(request as IRequestWithUser).user = user;
 
 			next();
 		});
