@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {Container, Block, Title, Field, Label, Control, Input, Button, Message, Checkbox} from 'rbx';
 import {Except} from 'type-fest';
+import Breadcrumbs from '../../../components/breadcrumbs';
 import {useAPI} from '../../../components/api-client-context';
 import {privateRoute} from '../../../components/private-route';
 import ModelEdit, {IFieldDefinition} from '../../../components/model-edit';
@@ -84,6 +85,8 @@ const NewUser = () => {
 	return (
 		<Container>
 			<Block/>
+
+			<Breadcrumbs/>
 
 			<Title size={1}>Add a user</Title>
 

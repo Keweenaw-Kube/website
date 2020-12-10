@@ -3,6 +3,7 @@ import {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import {Title, Container, Box, Block, Field, Label, Control, Input, Textarea, Button} from 'rbx';
 import {IUser} from '../../../lib/types';
+import Breadcrumbs from '../../../components/breadcrumbs';
 import {privateRoute} from '../../../components/private-route';
 import {useAPI} from '../../../components/api-client-context';
 import ModelEdit, {IFieldDefinition} from '../../../components/model-edit';
@@ -89,6 +90,8 @@ const EditUser: NextPage<{user: IUser}> = ({user: propsUser}) => {
 	return (
 		<Container>
 			<Block/>
+
+			<Breadcrumbs/>
 
 			<Title size={1}>Edit</Title>
 

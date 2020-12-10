@@ -1,10 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import {Title, Container, Box, Block, Table, Button, Icon, Progress, Column} from 'rbx';
+import Breadcrumbs from './breadcrumbs';
 
 const ModelTable = <T extends unknown>({loading = false, data, headerLabels = [], title, addHref, renderRow}: {loading: boolean; data?: T[]; headerLabels: string[]; title: string; addHref: string; renderRow: (row: T) => JSX.Element}) => (
 	<Container>
 		<Block/>
+
+		<Breadcrumbs/>
 
 		<Column.Group vcentered>
 			<Column>

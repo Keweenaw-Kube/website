@@ -4,9 +4,9 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faLink} from '@fortawesome/free-solid-svg-icons';
-import {IUser} from '../lib/types';
-import {useAPI, useAPIRoute} from '../components/api-client-context';
-import {privateRoute} from '../components/private-route';
+import {IUser} from '../../lib/types';
+import {useAPI, useAPIRoute} from '../../components/api-client-context';
+import {privateRoute} from '../../components/private-route';
 
 const Dashboard = () => {
 	const router = useRouter();
@@ -24,7 +24,7 @@ const Dashboard = () => {
 
 		setLoading(false);
 
-		await router.push('/link/minecraft');
+		await router.push('/dashboard/minecraft');
 	};
 
 	return (

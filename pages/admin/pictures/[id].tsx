@@ -8,6 +8,7 @@ import FormActions from '../../../components/form-actions';
 import FormError from '../../../components/form-error';
 import {useAPI} from '../../../components/api-client-context';
 import {privateRoute} from '../../../components/private-route';
+import Breadcrumbs from '../../../components/breadcrumbs';
 import ObjectAutosuggestSelector from '../../../components/object-autosuggest-selector';
 import {IUser, IServer, IPicture} from '../../../lib/types';
 import {APIClient, IPictureWithRelations} from '../../../lib/api-client';
@@ -85,6 +86,8 @@ const EditPicture: NextPage<{picture: IPictureWithRelations}> = ({picture: props
 	return (
 		<Container>
 			<Block/>
+
+			<Breadcrumbs/>
 
 			<Title size={1}>Edit picture</Title>
 

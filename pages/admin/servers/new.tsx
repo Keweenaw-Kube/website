@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Container, Block, Title} from 'rbx';
 import {useRouter} from 'next/router';
 import {IServer} from '../../../lib/types';
+import Breadcrumbs from '../../../components/breadcrumbs';
 import ModelEdit, {IFieldDefinition} from '../../../components/model-edit';
 import {useAPI} from '../../../components/api-client-context';
 
@@ -57,10 +58,12 @@ const NewServer = () => {
 		<Container>
 			<Block/>
 
+			<Breadcrumbs/>
+
 			<Title size={1}>Add a server</Title>
 
 			<form onSubmit={handleSubmit}>
-				<ModelEdit fields={fields} loading={loading} onChange={handleFieldChange}/>
+				<ModelEdit fields={fields} loading={loading} onChange={handleFieldChange} onCancel={async () => router.push('/admin/servers')}/>
 			</form>
 		</Container>
 	);

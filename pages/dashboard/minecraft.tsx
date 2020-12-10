@@ -6,6 +6,7 @@ import {useAPI, useAPIRoute} from '../../components/api-client-context';
 import {privateRoute} from '../../components/private-route';
 import ServerDomainTag from '../../components/server-domain-tag';
 import FormError from '../../components/form-error';
+import Breadcrumbs from '../../components/breadcrumbs';
 
 const LinkMinecraft = () => {
 	const router = useRouter();
@@ -42,6 +43,8 @@ const LinkMinecraft = () => {
 	return (
 		<Container>
 			<Block/>
+
+			<Breadcrumbs/>
 
 			<Title size={1}>Link Minecraft account</Title>
 

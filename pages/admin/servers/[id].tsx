@@ -3,6 +3,7 @@ import {NextPage} from 'next';
 import {useRouter} from 'next/router';
 import {Title, Container, Box, Block, Field, Label, Control, Input, Textarea, Button} from 'rbx';
 import {IServer} from '../../../lib/types';
+import Breadcrumbs from '../../../components/breadcrumbs';
 import {privateRoute} from '../../../components/private-route';
 import {useAPI} from '../../../components/api-client-context';
 import ModelEdit, {IFieldDefinition} from '../../../components/model-edit';
@@ -68,7 +69,9 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 		<Container>
 			<Block/>
 
-			<Title size={1}>Edit</Title>
+			<Breadcrumbs/>
+
+			<Title size={1}>Edit server</Title>
 
 			<form onSubmit={handleSubmit}>
 				<ModelEdit fields={fields} loading={loading} backHref="/admin/servers" onChange={handleFieldChange} onDelete={handleDelete}/>
