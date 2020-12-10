@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Container, Block, Title, Button, Column, Message, Icon} from 'rbx';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faLink} from '@fortawesome/free-solid-svg-icons';
 import {IUser} from '../lib/types';
@@ -8,10 +9,23 @@ import {useAPI, useAPIRoute} from '../components/api-client-context';
 import {privateRoute} from '../components/private-route';
 
 const Dashboard = () => {
+	const router = useRouter();
 	const {client} = useAPI();
 	const user = useAPIRoute<IUser>(`/api/users/${client.token.decodedToken.id}`);
+	const [loading, setLoading] = useState(false);
 
 	const isMinecraftLinked = user && (user.minecraftUUID && user.minecraftUUID !== '');
+
+	const handleMinecraftLink = async () => {
+		setLoading(true);
+		if (isMinecraftLinked) {
+			await client.unlinkMinecraftAccount();
+		}
+
+		setLoading(false);
+
+		await router.push('/link/minecraft');
+	};
 
 	return (
 		<Container>
@@ -43,15 +57,13 @@ const Dashboard = () => {
 
 			<Column.Group multiline>
 				<Column size="full">
-					<Link passHref href="/link/minecraft">
-						<Button color={isMinecraftLinked ? 'danger' : 'info'} as="a">
-							<Icon size="small">
-								<FontAwesomeIcon icon={faLink}/>
-							</Icon>
+					<Button color={isMinecraftLinked ? 'danger' : 'info'} state={loading ? 'loading' : undefined} onClick={handleMinecraftLink}>
+						<Icon size="small">
+							<FontAwesomeIcon icon={faLink}/>
+						</Icon>
 
-							<span>{isMinecraftLinked ? 'Relink Minecraft account' : 'Link Minecraft account'}</span>
-						</Button>
-					</Link>
+						<span>{isMinecraftLinked ? 'Relink Minecraft account' : 'Link Minecraft account'}</span>
+					</Button>
 				</Column>
 			</Column.Group>
 			<Block/>

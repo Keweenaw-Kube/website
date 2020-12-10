@@ -131,6 +131,10 @@ export class APIClient {
 		return this.getData<void>(this.client.post('api/whitelist', {json: {code}}));
 	}
 
+	async unlinkMinecraftAccount() {
+		return this.getData<void>(this.client.delete('api/whitelist'));
+	}
+
 	private async getData<T>(req: ResponsePromise): Promise<T> {
 		const res = await req;
 

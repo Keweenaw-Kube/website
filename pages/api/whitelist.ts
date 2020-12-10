@@ -100,4 +100,19 @@ export default nc()
 		});
 
 		res.status(200).json({});
+	})
+	.delete(async (request: IRequestWithUser, res: NextApiResponse) => {
+		// Unlink account
+
+		await prisma.user.update({
+			where: {
+				id: request.user.id
+			},
+			data: {
+				minecraftUUID: '',
+				minecraftUsername: ''
+			}
+		});
+
+		res.status(200).json({});
 	});

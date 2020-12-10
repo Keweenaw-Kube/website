@@ -25,9 +25,7 @@ const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?
 
 				setAuthToken(newToken);
 
-				if (newToken.decodedToken.isOfficer) {
-					await router.push('/admin');
-				}
+				await router.push('/dashboard');
 			} else {
 				displayLoginError();
 			}
