@@ -1,0 +1,28 @@
+.card {
+  display: flex;
+  min-height: 30vh;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cardBackground {
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.5;
+  }
+}
+
+.cardContent {
+  z-index: 100;
+  min-height: 100%;
+  width: 100%;
+  color: white;
+  padding: 0 2rem;
+}
