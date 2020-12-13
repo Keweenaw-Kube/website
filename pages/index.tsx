@@ -23,7 +23,7 @@ export default function Home({picture}: {picture?: IPicture}) {
 	return (
 		<Hero size="fullheight-with-navbar" className={styles.hero}>
 			<div className={styles.heroBackground}>
-				{picture && <Image loading="eager" src={picture.path} layout="fill" objectFit="cover"/>}
+				{picture && <Image priority src={picture.path} layout="fill" objectFit="cover"/>}
 			</div>
 
 			<Hero.Body>

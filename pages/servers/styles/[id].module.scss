@@ -1,0 +1,14 @@
+.pictureContainer {
+  position: relative;
+}
+
+.pictureCaption {
+  position: absolute;
+  bottom: 0;
+  background-color: black;
+  background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(255,255,255,0) 100%);
+  color: white;
+  width: 100%;
+  padding: 1rem;
+  font-weight: bold;
+}
