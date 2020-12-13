@@ -14,7 +14,6 @@ function MyApp({Component, pageProps}: AppProps) {
 	return (
 		<div>
 			<Head>
-				<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
 				<title>Keweenaw Kube</title>
 			</Head>
 

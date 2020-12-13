@@ -7,4 +7,6 @@ const getBaseURL = (ctx: NextPageContext) => {
 	return `${protocol}://${host}`;
 };
 
-export {getBaseURL};
+const getRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+export {getBaseURL, getRandomInt};
