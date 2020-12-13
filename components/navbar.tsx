@@ -13,7 +13,7 @@ const MainNavbar = () => {
 	const isOfficer = client.token.decodedToken.isOfficer;
 
 	return (
-		<Navbar>
+		<Navbar color="black">
 			<Navbar.Brand>
 				<Link passHref href="/">
 					<Navbar.Item>

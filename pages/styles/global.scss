@@ -14,18 +14,13 @@ $title-weight: 700;
 $yellow: #FCD11A;
 $cyan: #46C9FD;
 
-$primary: darken($yellow, 10%);
+$primary: $yellow;
 $info: darken($cyan, 10%);
 
 $text: black;
 $text-light: black;
 $text-strong: black;
 $title-color: black;
-
-// Block Mode™️
-$radius-small: 0;
-$radius: 0;
-$radius-large: 0;
 
 // Import Bulma styles
 @import "~bulma/bulma";

@@ -6,6 +6,7 @@ import prisma from '../api/lib/db';
 import {IPicture, IServer} from '../../lib/types';
 import ServerDomainTag from '../../components/server-domain-tag';
 import TilesGrid from '../../components/tiles-grid';
+import Breadcrumbs from '../../components/breadcrumbs';
 import styles from './styles/[id].module.scss';
 
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -37,6 +38,8 @@ const SpecificServerPage = ({server: propServer}: {server: string}) => {
 	return (
 		<Container>
 			<Block/>
+
+			<Breadcrumbs/>
 
 			<Title size={1}>{server.name}</Title>
 

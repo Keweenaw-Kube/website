@@ -1,7 +1,7 @@
 import React from 'react';
 import {GetServerSideProps} from 'next';
 import Image from 'next/image';
-import {Hero, Container, Title, Button, Content} from 'rbx';
+import {Hero, Container, Title, Button, Content, Generic} from 'rbx';
 import Link from 'next/link';
 import prisma from './api/lib/db';
 import styles from './styles/index.module.scss';
@@ -36,13 +36,13 @@ export default function Home({picture}: {picture?: IPicture}) {
 
 					<Button.Group>
 						<Link passHref href="/login">
-							<Button color="primary" as="a">
-								<strong>Join Whitelist</strong>
+							<Button color="primary" as="a" size="medium">
+								<Generic textColor="black"><strong>Join Whitelist</strong></Generic>
 							</Button>
 						</Link>
 
 						<Link passHref href="/servers">
-							<Button color="info" as="a">
+							<Button color="info" as="a" size="medium">
 								<strong>Server info</strong>
 							</Button>
 						</Link>
