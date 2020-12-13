@@ -7,6 +7,8 @@ import prisma from './api/lib/db';
 import styles from './styles/index.module.scss';
 import {IPicture} from '../lib/types';
 import {getRandomInt} from '../lib/helpers';
+import LoginButton from '../components/login-button';
+import {useAPI} from '../components/api-client-context';
 
 export const getServerSideProps: GetServerSideProps = async context => {
 	const count = await prisma.picture.count({where: {isApproved: true}});
@@ -20,6 +22,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 export default function Home({picture}: {picture?: IPicture}) {
+	const {client} = useAPI();
+
+	const isLoggedIn = client.isAuthorized();
+
 	return (
 		<Hero size="fullheight-with-navbar" className={styles.hero}>
 			<div className={styles.heroBackground}>
@@ -35,11 +41,21 @@ export default function Home({picture}: {picture?: IPicture}) {
 					</Content>
 
 					<Button.Group>
-						<Link passHref href="/login">
-							<Button color="primary" as="a" size="medium">
-								<Generic textColor="black"><strong>Join Whitelist</strong></Generic>
-							</Button>
-						</Link>
+						{
+							isLoggedIn ? (
+								<Link passHref href="/dashboard">
+									<Button color="primary" as="a" size="medium">
+										<Generic textColor="black"><strong>Join Whitelist</strong></Generic>
+									</Button>
+								</Link>
+							) : (
+								<LoginButton render={renderProps => (
+									<Button color="primary" size="medium" disabled={renderProps.disabled} onClick={renderProps.onClick}>
+										<Generic textColor="black"><strong>Join Whitelist</strong></Generic>
+									</Button>
+								)}/>
+							)
+						}
 
 						<Link passHref href="/servers">
 							<Button color="info" as="a" size="medium">
