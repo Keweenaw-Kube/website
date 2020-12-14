@@ -5,6 +5,7 @@ RUN apk add --no-cache libc6-compat curl
 
 WORKDIR /opt/app
 
+# Install dependencies
 COPY package.json /opt/app
 COPY yarn.lock /opt/app
 COPY prisma/schema.prisma /opt/app/prisma/schema.prisma
@@ -13,12 +14,21 @@ RUN yarn install
 
 COPY . /opt/app
 
+# Set config variables
 ENV NODE_ENV production
 ENV PORT 3000
 
 # rbx doesn't play nicely with TypeScript 🙃
 ENV NODE_OPTIONS --max-old-space-size=4096
 
+# Arguments for frontend build - only those prefixed with NEXT_ are necessary, others can be injected during runtime
+ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID
+ARG NEXT_PUBLIC_DISCORD_INVITE
+
+ENV NEXT_PUBLIC_GOOGLE_CLIENT_ID "$NEXT_PUBLIC_GOOGLE_CLIENT_ID"
+ENV NEXT_PUBLIC_DISCORD_INVITE "$NEXT_PUBLIC_DISCORD_INVITE"
+
+# Build app
 RUN yarn build
 
 RUN npx next telemetry disable

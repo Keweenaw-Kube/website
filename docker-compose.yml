@@ -2,7 +2,6 @@ version: '3.4'
 
 services:
   site:
-    image: kube/website:v1
     networks:
       - internal
       - web
@@ -10,14 +9,20 @@ services:
       DATABASE_URL: 'postgresql://postgres:postgres@db:5432/postgres?schema=public'
     depends_on:
       - db
+    env_file: .env
     build:
+      args:
+        - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        - NEXT_PUBLIC_DISCORD_INVITE=${NEXT_PUBLIC_DISCORD_INVITE}
       context: .
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.website.tls.certresolver=default"
   
   db:
-    image: postgres
+    image: postgres:13
+    volumes:
+      - ./data:/var/lib/postgresql/data
     networks:
       - internal
     environment: 

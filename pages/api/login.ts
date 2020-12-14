@@ -22,11 +22,14 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 
 		if (!user) {
 			// Make a new user
+			const numberOfCurrentUsers = await prisma.user.count();
+
 			user = await prisma.user.create({
 				data: {
 					email: decoded.email,
-					isOfficer: false,
-					isMember: false
+					// First user to login is an officer
+					isOfficer: numberOfCurrentUsers === 0,
+					isMember: numberOfCurrentUsers === 0
 				}
 			});
 		}

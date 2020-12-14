@@ -32,6 +32,7 @@ const WrappedApp = (props: AppProps & {token: AuthToken}) => (
 	</APIClientProvider>
 );
 
+// TODO: convert to server-side props?
 WrappedApp.getInitialProps = async (props: AppContextType<Router>) => {
 	const appProps = await App.getInitialProps(props);
 
