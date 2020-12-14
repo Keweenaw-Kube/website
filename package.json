@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "xo",
     "lint-fix": "xo --fix",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test": "yarn lint"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
