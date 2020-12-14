@@ -37,6 +37,7 @@ const LoginButton = ({render}: {render: (props: { onClick: () => void; disabled?
 	};
 
 	const handleLoginFailure = (error: any) => {
+		console.error('Login error:', error);
 		displayLoginError();
 	};
 
