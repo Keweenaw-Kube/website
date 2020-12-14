@@ -16,7 +16,7 @@ const ServerDomainTag = ({domain, size = 'medium', limitToMembers}: {domain: str
 	return (
 		<Tag.Group gapless>
 			{typeof limitToMembers === 'boolean' && (
-				limitToMembers ? <Tag color="warning" size={size}>Members Only</Tag> : <Tag color="success" size={size}>Open to Everyone</Tag>
+				limitToMembers ? <Tag color="warning" textColor="black" size={size}>Members Only</Tag> : <Tag color="success" size={size}>Open to Everyone</Tag>
 			)}
 
 			<Tag size={size}>{domain}</Tag>

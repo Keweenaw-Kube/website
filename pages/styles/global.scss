@@ -25,3 +25,7 @@ $title-color: black;
 // Import Bulma styles
 @import "~bulma/bulma";
 @import "~rbx/rbx";
+
+p {
+  max-width: 65ch;
+}

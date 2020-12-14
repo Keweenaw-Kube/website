@@ -38,7 +38,7 @@ const MainNavbar = () => {
 						<Navbar.Item>About</Navbar.Item>
 					</Link>
 
-					<Navbar.Item href="https://discord.gg/MNxSwZ45c4" title="Join our Discord server!">
+					<Navbar.Item href={process.env.NEXT_PUBLIC_DISCORD_INVITE} title="Join our Discord server!">
 						<Icon>
 							<FontAwesomeIcon icon={faDiscord}/>
 						</Icon>
