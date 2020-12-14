@@ -17,9 +17,10 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 20 # seconds
       - name: Deploy
-        uses: sagebind/docker-swarm-deploy-action@v2
+        uses: wshihadeh/docker-deployment-action@v1
         with:
-          remote_host: ssh://kube@kubemtu.com
+          remote_docker_host: kube@kubemtu.com
           ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
-          ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
-          args: stack deploy --compose-file app.yml website
+          deployment_mode: docker-swarm
+          stack_file_name: app.yml
+          args: website
