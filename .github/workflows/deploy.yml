@@ -24,4 +24,5 @@ jobs:
           ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
           deployment_mode: docker-swarm
           stack_file_name: app.yml
+          copy_stack_file: true
           args: website
