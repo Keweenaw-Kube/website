@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  site:
+    image: kube/website:v1
+    networks:
+      - internal
+    ports:
+      - 3000:3000
+    environment: 
+      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/postgres?schema=public'
+    depends_on:
+      - db
+    deploy:
+      update_config:
+        order: start-first
+  
+  db:
+    image: postgres
+    networks:
+      - internal
+    environment: 
+      POSTGRES_PASSWORD: 'postgres'
+
+networks:
+  internal:
