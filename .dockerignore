@@ -1,0 +1,7 @@
+.git
+node_modules
+.env*
+.next
+prisma/.env
+Dockerfile
+app.yml

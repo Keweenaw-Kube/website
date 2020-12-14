@@ -23,6 +23,6 @@ jobs:
           username: kube
           key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           script: |
-            cd /docker/stacks/website
+            cd /docker/website
             git pull
-            docker stack deploy website -c app.yml
+            docker-compose up -d
