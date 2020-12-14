@@ -21,6 +21,7 @@ jobs:
         with:
           remote_docker_host: kube@kubemtu.com
           ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
           deployment_mode: docker-swarm
           stack_file_name: app.yml
           args: website
