@@ -9,17 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Wait on tests
-        uses: lewagon/wait-on-check-action@v0.1
-        with:
-          ref: main
-          check-name: build
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 20 # seconds
+      # - name: Wait on tests
+      #   uses: lewagon/wait-on-check-action@v0.1
+      #   with:
+      #     ref: main
+      #     check-name: build
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #     wait-interval: 20 # seconds
       - name: Deploy
         uses: wshihadeh/docker-deployment-action@v1
         with:
           remote_docker_host: kube@kubemtu.com
+          deploy_path: /docker
           ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
           deployment_mode: docker-swarm
