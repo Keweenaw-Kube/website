@@ -14,6 +14,7 @@ services:
       args:
         - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
         - NEXT_PUBLIC_DISCORD_INVITE=${NEXT_PUBLIC_DISCORD_INVITE}
+        - CLOUDINARY_NAME=${CLOUDINARY_NAME}
       context: .
     labels:
       - "traefik.enable=true"
