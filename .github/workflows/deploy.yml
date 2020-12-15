@@ -12,7 +12,7 @@ jobs:
       - name: Wait on tests
         uses: lewagon/wait-on-check-action@v0.1
         with:
-          ref: main
+          ref: $GITHUB_SHA
           check-name: build
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 20 # seconds
