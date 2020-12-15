@@ -16,6 +16,12 @@ const AboutPage = () => (
 		<p>
 			If you&apos;re interested in becoming a member or want to reach out, <a href={process.env.NEXT_PUBLIC_DISCORD_INVITE}>join our Discord server</a> or email <a href="mailto:kube@mtu.edu">kube@mtu.edu</a>.
 		</p>
+
+		<Block/>
+
+		<p>
+			Our code is open-source and can be found at <a href="https://github.com/Keweenaw-Kube">github.com/Keweenaw-Kube</a>.
+		</p>
 	</Container>
 );
 
