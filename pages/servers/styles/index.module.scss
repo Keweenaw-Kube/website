@@ -1,7 +1,8 @@
 .cardContainer {
   margin-bottom: 2rem;
   width: auto;
-  transition: max-width 0.2s;
+  transition: max-width 0.4s;
+  transition-timing-function: cubic-bezier(0.83, 0, 0.17, 1);
   
   &:hover {
     max-width: 100vw !important;
