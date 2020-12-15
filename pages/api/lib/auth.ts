@@ -88,3 +88,44 @@ export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextA
 		});
 	});
 };
+
+export const authWithToken = async (request: NextApiRequest): Promise<boolean> => {
+	const header = request.headers.authorization;
+
+	let tokenSegment;
+
+	if (header) {
+		if (!header?.startsWith('Basic ')) {
+			return false;
+		}
+
+		tokenSegment = header.replace('Basic ', '');
+	} else {
+		tokenSegment = request.query.token as string;
+	}
+
+	if (!tokenSegment) {
+		return false;
+	}
+
+	const storedToken = await prisma.authToken.findOne({
+		where: {
+			token: tokenSegment
+		}
+	});
+
+	if (!storedToken) {
+		return false;
+	}
+
+	await prisma.authToken.update({
+		where: {
+			token: tokenSegment
+		},
+		data: {
+			lastUsedAt: new Date()
+		}
+	});
+
+	return true;
+};

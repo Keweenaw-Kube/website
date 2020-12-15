@@ -16,6 +16,10 @@ const LINKS = [
 	{
 		label: 'Pictures',
 		href: '/admin/pictures'
+	},
+	{
+		label: 'Auth Tokens',
+		href: '/admin/tokens'
 	}
 ];
 

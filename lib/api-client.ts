@@ -135,6 +135,14 @@ export class APIClient {
 		return this.getData<void>(this.client.delete('api/whitelist'));
 	}
 
+	async createToken(name: string) {
+		return this.getData(this.client.post('api/tokens', {json: {name}}));
+	}
+
+	async deleteToken(token: string) {
+		await this.getData(this.client.delete(`api/tokens/${token}`));
+	}
+
 	private async getData<T>(req: ResponsePromise): Promise<T> {
 		const res = await req;
 

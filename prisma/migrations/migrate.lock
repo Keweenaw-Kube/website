@@ -1,3 +1,4 @@
 # Prisma Migrate lockfile v1
 
 20201214011711-initial-migration
+20201215013222-add-auth-token

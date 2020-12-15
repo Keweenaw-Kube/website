@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Migrate database
-npx prisma migrate up --experimental
+yarn migrate
 
 # Start site
 yarn start

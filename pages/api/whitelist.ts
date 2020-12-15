@@ -2,14 +2,20 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import nc from 'next-connect';
 import * as securePin from 'secure-pin';
 import prisma from './lib/db';
-import {authMiddleware, IRequestWithUser} from './lib/auth';
+import {authMiddleware, authWithToken, IRequestWithUser} from './lib/auth';
 import {getProfileByUUID} from './lib/mojang';
-import {parseId} from './lib/parse-params';
 
 const CODE_VALID_PERIOD_MS = 5 * 60 * 1000;
 
 export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
+		const isAuthorized = await authWithToken(request);
+
+		if (!isAuthorized) {
+			res.status(401).send('Bad API authorization.');
+			return;
+		}
+
 		const domain = request.query.domain as string;
 		const uuid = request.query.uuid as string;
 

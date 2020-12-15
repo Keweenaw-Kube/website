@@ -43,3 +43,9 @@ export interface IPicture {
 	isApproved: boolean;
 	caption: string;
 }
+
+export interface IToken {
+	token: string;
+	name: string;
+	lastUsedAt: string;
+}
