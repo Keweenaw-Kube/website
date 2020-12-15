@@ -24,9 +24,11 @@ ENV NODE_OPTIONS --max-old-space-size=4096
 # Arguments for frontend build - only those prefixed with NEXT_ are necessary, others can be injected during runtime
 ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID
 ARG NEXT_PUBLIC_DISCORD_INVITE
+ARG NEXT_PUBLIC_ENDPOINT
 
 ENV NEXT_PUBLIC_GOOGLE_CLIENT_ID "$NEXT_PUBLIC_GOOGLE_CLIENT_ID"
 ENV NEXT_PUBLIC_DISCORD_INVITE "$NEXT_PUBLIC_DISCORD_INVITE"
+ENV NEXT_PUBLIC_ENDPOINT "$NEXT_PUBLIC_ENDPOINT"
 
 # Cloudinary is an exception to the above since it's in next.config.js
 ARG CLOUDINARY_NAME

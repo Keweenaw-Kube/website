@@ -39,7 +39,7 @@ export class APIClient {
 			headers: {
 				Authorization: token.isValid ? token.authorizationString : ''
 			},
-			prefixUrl: '/',
+			prefixUrl: `${process.env.NEXT_PUBLIC_ENDPOINT as string}/`,
 			throwHttpErrors: false,
 			retry: 0,
 			timeout: 20000
