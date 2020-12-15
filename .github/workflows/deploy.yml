@@ -26,4 +26,4 @@ jobs:
             cd /docker/website
             git pull
             docker-compose build
-            docker-compose up -d
+            ./deployment.sh

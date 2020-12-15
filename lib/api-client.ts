@@ -45,10 +45,6 @@ export class APIClient {
 			timeout: 20000
 		};
 
-		if (option.constructor !== AuthToken) {
-			options.prefixUrl = getBaseURL(option as NextPageContext);
-		}
-
 		this.client = ky.create(options);
 	}
 
