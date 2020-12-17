@@ -48,14 +48,14 @@ export default nc()
 		if (request.body.minecraftUsername === '') {
 			request.body.minecraftUUID = '';
 		} else {
-			const profiles = await getProfileByName(request.body.minecraftUsername);
+			const profile = await getProfileByName(request.body.minecraftUsername);
 
-			if (profiles.length === 0) {
+			if (!profile) {
 				res.status(400).json({error: 'Minecraft user does not exist'});
 				return;
 			}
 
-			request.body.minecraftUUID = profiles[0].id;
+			request.body.minecraftUUID = profile.id;
 		}
 
 		await prisma.user.update({

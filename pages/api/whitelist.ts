@@ -89,11 +89,6 @@ export default nc()
 		// Get Mojang username
 		const profile = await getProfileByUUID(token.minecraftUUID);
 
-		if (profile.length === 0) {
-			res.status(500).json({error: 'Issue with Mojang API'});
-			return;
-		}
-
 		// Update user
 		await prisma.user.update({
 			where: {
@@ -101,7 +96,7 @@ export default nc()
 			},
 			data: {
 				minecraftUUID: token.minecraftUUID,
-				minecraftUsername: profile[0].name
+				minecraftUsername: profile.name
 			}
 		});
 

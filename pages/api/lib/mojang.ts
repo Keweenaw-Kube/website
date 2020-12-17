@@ -1,10 +1,16 @@
 import got from 'got';
-import {IMojangName, IMojangUser} from '../../../lib/types';
+import {IMojangProfile, IMojangName} from '../../../lib/types';
 
 export const getProfileByUUID = async (uuid: string) => {
-	return got.get(`https://api.mojang.com/user/profiles/${uuid}/names`).json<IMojangName[]>();
+	return got.get(`https://api.mojang.com/user/profile/${uuid}`).json<IMojangProfile>();
 };
 
-export const getProfileByName = async (name: string) => {
-	return got.post('https://api.mojang.com/profiles/minecraft', {json: [name]}).json<IMojangUser[]>();
+export const getProfileByName = async (name: string): Promise<IMojangName | null> => {
+	const res = await got.get(`https://api.mojang.com/users/profiles/minecraft/${name}`).json<IMojangName>();
+
+	if (typeof res === 'string') {
+		return null;
+	}
+
+	return res;
 };

@@ -3,8 +3,7 @@ import ky from 'ky/umd';
 import {Options, ResponsePromise} from 'ky';
 import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
-import {IServer, IRole, IMojangName, IMojangUser, IUser, IPicture} from './types';
-import {getBaseURL} from './helpers';
+import {IServer, IUser, IPicture} from './types';
 
 interface IAPIResponse<T> {
 	data: T;

@@ -22,15 +22,13 @@ export interface IUser {
 }
 
 export interface IMojangName {
-	name: string;
-	changedToAt?: number;
-}
-
-export interface IMojangUser {
 	id: string;
 	name: string;
-	legacy?: boolean;
-	demo?: boolean;
+}
+
+export interface IMojangProfile {
+	id: string;
+	name: string;
 }
 
 export interface IPicture {
