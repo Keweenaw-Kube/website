@@ -3,12 +3,10 @@ version: '3.4'
 services:
   site:
     networks:
-      - internal
       - web
-    environment: 
-      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/postgres?schema=public'
-    depends_on:
       - db
+    environment: 
+      DATABASE_URL: 'postgresql://postgres:3da805e3-365f-47a4-af60-3f3e11c81d0d@db:5432/postgres?schema=public'
     env_file: .env
     build:
       args:
@@ -16,22 +14,18 @@ services:
         - NEXT_PUBLIC_DISCORD_INVITE=${NEXT_PUBLIC_DISCORD_INVITE}
         - NEXT_PUBLIC_ENDPOINT=${NEXT_PUBLIC_ENDPOINT}
         - CLOUDINARY_NAME=${CLOUDINARY_NAME}
+        - DATABASE_URL='postgresql://postgres:3da805e3-365f-47a4-af60-3f3e11c81d0d@db:5432/postgres?schema=public'
       context: .
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.website.tls.certresolver=default"
       - "traefik.http.routers.website.rule=Host(`kubemtu.com`)"
-  
-  db:
-    image: postgres:13
-    volumes:
-      - ./data:/var/lib/postgresql/data
-    networks:
-      - internal
-    environment: 
-      POSTGRES_PASSWORD: 'postgres'
+      - "traefik.http.services.website.loadbalancer.healthcheck.path=/"
+      - "traefik.http.services.website.loadbalancer.healthcheck.interval=5s"
+      - "traefik.http.services.website.loadbalancer.healthcheck.timeout=1s"
 
 networks:
-  internal:
   web:
+    external: true
+  db:
     external: true
