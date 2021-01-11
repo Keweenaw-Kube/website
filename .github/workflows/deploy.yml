@@ -10,11 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Wait on tests
-        uses: lewagon/wait-on-check-action@master
+        uses: lewagon/wait-on-check-action@v0.2
         with:
           ref: ${{ github.sha }}
-          check-name: build
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10 # seconds
       - name: Deploy
         uses: appleboy/ssh-action@master
