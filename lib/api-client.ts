@@ -52,7 +52,7 @@ export class APIClient {
 	}
 
 	async login(jwt: string) {
-		const response = await ky.get('api/login', {
+		const response = await ky.get(`${process.env.NEXT_PUBLIC_ENDPOINT as string}/api/login`, {
 			headers: {
 				Authorization: jwt
 			},
