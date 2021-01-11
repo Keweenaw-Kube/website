@@ -13,6 +13,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v0.2
         with:
           ref: ${{ github.sha }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10 # seconds
       - name: Deploy
         uses: appleboy/ssh-action@master
