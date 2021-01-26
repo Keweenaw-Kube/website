@@ -8,6 +8,9 @@ else
     OLD="green"
 fi
 
+echo "Building..."
+docker-compose --project-name=$ENV build
+
 echo "Starting "$ENV" container"
 docker-compose --project-name=$ENV up -d
 
