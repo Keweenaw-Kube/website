@@ -11,7 +11,7 @@ const ModelTable = <T extends unknown>({loading = false, data, headerLabels = []
 
 		<Column.Group vcentered>
 			<Column>
-				<Title size={1}>{title}</Title>
+				<Title size={1}>{title} {data ? `(${data.length})` : ''}</Title>
 			</Column>
 
 			<Column narrow pull="right">
