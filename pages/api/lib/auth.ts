@@ -1,8 +1,8 @@
+import {User} from '@prisma/client';
 import jwt, {JwtHeader, SigningKeyCallback} from 'jsonwebtoken';
 import jwk from 'jwks-rsa';
 import {NextApiRequest, NextApiResponse} from 'next';
 import {NextHandler} from 'next-connect';
-import {IUser} from '../../../lib/types';
 import {SIGNING_SECRET} from './config';
 import prisma from './db';
 
@@ -50,7 +50,7 @@ const getToken = (request: NextApiRequest): string | null => {
 };
 
 export interface IRequestWithUser extends NextApiRequest {
-	user: IUser;
+	user: User;
 }
 
 export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextApiRequest, res: NextApiResponse, next: NextHandler) => {

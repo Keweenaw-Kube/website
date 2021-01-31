@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import {Container, Block, Title, Field, Label, Control, Input, Button, Message, Checkbox} from 'rbx';
+import {Container, Block, Title} from 'rbx';
 import {Except} from 'type-fest';
 import Breadcrumbs from '../../../components/breadcrumbs';
 import {useAPI} from '../../../components/api-client-context';
@@ -13,7 +13,7 @@ const NewUser = () => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
-	const [user, setUser] = useState<Except<Except<IUser, 'id'>, 'minecraftUUID'>>({
+	const [user, setUser] = useState<Except<IUser, 'id' | 'minecraftUUID' | 'lastLoggedInAt'>>({
 		email: '',
 		minecraftUsername: '',
 		isOfficer: false,
