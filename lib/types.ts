@@ -19,6 +19,7 @@ export interface IUser {
 	isOfficer: boolean;
 	isMember: boolean;
 	isBanned: boolean;
+	lastLoggedInAt: string;
 }
 
 export interface IMojangName {

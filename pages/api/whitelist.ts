@@ -48,6 +48,15 @@ export default nc()
 				return;
 			}
 
+			await prisma.user.update({
+				where: {
+					id: user.id
+				},
+				data: {
+					lastLoggedInAt: new Date()
+				}
+			});
+
 			res.status(200).send('');
 		} else {
 			// Generate code for user
