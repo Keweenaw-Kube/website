@@ -8,6 +8,7 @@ import ServerDomainTag from '../../components/server-domain-tag';
 import TilesGrid from '../../components/tiles-grid';
 import Breadcrumbs from '../../components/breadcrumbs';
 import styles from './styles/[id].module.scss';
+import {NextSeo} from 'next-seo';
 
 export const getServerSideProps: GetServerSideProps = async context => {
 	const server = await prisma.server.findFirst({
@@ -35,6 +36,8 @@ interface IServerWithPictures extends IServer {
 const SpecificServerPage = ({server: propServer}: {server: string}) => {
 	const server: IServerWithPictures = JSON.parse(propServer);
 
+	console.log(server);
+
 	return (
 		<Container>
 			<Block/>
@@ -57,6 +60,10 @@ const SpecificServerPage = ({server: propServer}: {server: string}) => {
 						<div className={styles.pictureCaption}>{picture.caption}</div>
 					</div>
 				)}/>
+
+			<NextSeo
+				title={server.name}
+				description={server.description}/>
 		</Container>
 	);
 };
