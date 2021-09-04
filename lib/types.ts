@@ -4,6 +4,8 @@ export interface IServer {
 	description: string;
 	domain: string;
 	limitToMembers: boolean;
+	isArchived: boolean;
+	archiveFileUrl: string | null;
 }
 
 export interface IRole {

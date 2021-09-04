@@ -70,7 +70,7 @@ export const authMiddleware = ({limitToOfficer = false} = {}) => (request: NextA
 
 			const {email} = (decoded as {email: string});
 
-			const user = await prisma.user.findOne({where: {email}});
+			const user = await prisma.user.findFirst({where: {email}});
 
 			if (!user) {
 				res.status(401).end();
@@ -108,7 +108,7 @@ export const authWithToken = async (request: NextApiRequest): Promise<boolean> =
 		return false;
 	}
 
-	const storedToken = await prisma.authToken.findOne({
+	const storedToken = await prisma.authToken.findFirst({
 		where: {
 			token: tokenSegment
 		}

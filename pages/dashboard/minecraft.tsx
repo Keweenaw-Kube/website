@@ -14,9 +14,7 @@ const LinkMinecraft = () => {
 	const [code, setCode] = useState('');
 	const [errorMsg, setErrorMsg] = useState('');
 	const {client} = useAPI();
-	const servers = useAPIRoute<IServer[]>('/api/servers');
-
-	const serverDomain = servers && servers.length > 0 ? servers[0].domain : '';
+	const servers = useAPIRoute<IServer[]>('/api/servers?isArchived=false');
 
 	const handleLinkRequest = useCallback(async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -54,7 +52,11 @@ const LinkMinecraft = () => {
 				<Column narrow>First, attempt to join any server, like</Column>
 
 				<Column narrow>
-					<ServerDomainTag domain={serverDomain}/>
+					{
+						servers && servers.length > 0 && (
+							<ServerDomainTag {...servers[0]} hasText={false}/>
+						)
+					}
 				</Column>
 			</Column.Group>
 

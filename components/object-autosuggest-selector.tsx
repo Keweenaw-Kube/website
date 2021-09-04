@@ -5,7 +5,11 @@ import {ConditionalKeys} from 'type-fest';
 import {useAPIRoute} from './api-client-context';
 import styles from './styles/object-autosuggest-selector.module.scss';
 
-interface Props<T extends {id: number}> {
+type ModelWithId = {
+	id: number;
+};
+
+interface Props<T extends ModelWithId> {
 	apiPath: string;
 	renderSuggestion: (s: T) => React.ReactNode;
 	getSuggestionValue: (s: T) => string;
@@ -16,7 +20,7 @@ interface Props<T extends {id: number}> {
 	searchFields: Array<ConditionalKeys<T, string>>;
 }
 
-const ObjectAutosuggestSelector = <T extends {id: number}>({apiPath, renderSuggestion, getSuggestionValue, placeholder, onSelection, label, selection, searchFields}: Props<T>) => {
+const ObjectAutosuggestSelector = <T extends ModelWithId>({apiPath, renderSuggestion, getSuggestionValue, placeholder, onSelection, label, selection, searchFields}: Props<T>) => {
 	const apiResults = useAPIRoute<T[]>(apiPath);
 	const [inputValue, setInputValue] = useState('');
 	const [suggestions, setSuggestions] = useState<T[]>([]);

@@ -8,7 +8,7 @@ export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = parseId(request);
 
-		const server = await prisma.server.findOne({
+		const server = await prisma.server.findFirst({
 			where: {
 				id
 			}
@@ -48,4 +48,3 @@ export default nc()
 
 		res.status(200).json({});
 	});
-

@@ -15,7 +15,7 @@ export default nc()
 			return;
 		}
 
-		const user = await prisma.user.findOne({
+		const user = await prisma.user.findFirst({
 			where: {
 				id
 			}
@@ -37,7 +37,7 @@ export default nc()
 		}
 
 		// Check email
-		const u = await prisma.user.findOne({where: {email: request.body.email}});
+		const u = await prisma.user.findFirst({where: {email: request.body.email}});
 
 		if (u?.id !== id) {
 			res.status(400).json({error: 'Email already exists'});
@@ -86,4 +86,3 @@ export default nc()
 
 		res.json({});
 	});
-

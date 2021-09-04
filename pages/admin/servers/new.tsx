@@ -9,7 +9,15 @@ import {useAPI} from '../../../components/api-client-context';
 const NewServer = () => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
-	const [server, setServer] = useState<IServer>({id: -1, name: '', domain: '', description: '', limitToMembers: false});
+	const [server, setServer] = useState<IServer>({
+		id: -1,
+		name: '',
+		domain: '',
+		description: '',
+		limitToMembers: false,
+		isArchived: false,
+		archiveFileUrl: null
+	});
 	const {client} = useAPI();
 
 	const fields: IFieldDefinition[] = [

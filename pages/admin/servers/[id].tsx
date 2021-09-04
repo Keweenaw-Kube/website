@@ -62,6 +62,18 @@ const EditServer: NextPage<{server: IServer}> = ({server: propsServer}) => {
 			name: 'limitToMembers',
 			value: server.limitToMembers,
 			type: 'checkbox'
+		},
+		{
+			label: 'Is Archived',
+			name: 'isArchived',
+			value: server.isArchived,
+			type: 'checkbox'
+		},
+		{
+			label: 'Archive File URL',
+			name: 'archiveFileUrl',
+			value: server.archiveFileUrl ?? '',
+			type: 'input'
 		}
 	];
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import {GetServerSideProps} from 'next';
-import {Container, Block, Title, Tile, Box} from 'rbx';
+import {Container, Block, Title, Button} from 'rbx';
 import prisma from '../api/lib/db';
 import {IPicture, IServer} from '../../lib/types';
 import ServerDomainTag from '../../components/server-domain-tag';
@@ -10,7 +10,7 @@ import Breadcrumbs from '../../components/breadcrumbs';
 import styles from './styles/[id].module.scss';
 
 export const getServerSideProps: GetServerSideProps = async context => {
-	const server = await prisma.server.findOne({
+	const server = await prisma.server.findFirst({
 		where: {
 			id: Number.parseInt(context.params?.id as string, 10)
 		},
@@ -43,7 +43,7 @@ const SpecificServerPage = ({server: propServer}: {server: string}) => {
 
 			<Title size={1}>{server.name}</Title>
 
-			<ServerDomainTag domain={server.domain} size="medium" limitToMembers={server.limitToMembers}/>
+			<ServerDomainTag size="medium" {...server}/>
 
 			<p style={{maxWidth: '60ch'}}>{server.description}</p>
 

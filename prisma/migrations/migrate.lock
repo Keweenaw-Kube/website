@@ -3,3 +3,4 @@
 20201214011711-initial-migration
 20201215013222-add-auth-token
 20210131183843-add-last-logged-in-at-field
+20210904191359-allow-servers-to-be-archived

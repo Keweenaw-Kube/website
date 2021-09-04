@@ -29,7 +29,7 @@ export const useAPI = () => {
 	return {client, setAuthToken};
 };
 
-export const useAPIRoute = <T extends Record<symbol, unknown>>(route: string) => {
+export const useAPIRoute = function <T>(route: string) {
 	const router = useRouter();
 	const {client, setAuthToken} = useAPI();
 
@@ -73,4 +73,3 @@ export const useAPIRoute = <T extends Record<symbol, unknown>>(route: string) =>
 
 	return data;
 };
-

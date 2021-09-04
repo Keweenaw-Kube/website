@@ -18,7 +18,7 @@ const login = async (request: NextApiRequest, res: NextApiResponse) => {
 	try {
 		const decoded = await checkAndDecodeGoogleJWT(googleJWT) as GoogleJWT;
 
-		let user = await prisma.user.findOne({where: {email: decoded.email}});
+		let user = await prisma.user.findFirst({where: {email: decoded.email}});
 
 		if (!user) {
 			// Make a new user

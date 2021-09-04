@@ -8,7 +8,7 @@ export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
 		const id = parseId(request);
 
-		const picture = await prisma.picture.findOne({
+		const picture = await prisma.picture.findFirst({
 			where: {
 				id
 			},
@@ -58,4 +58,3 @@ export default nc()
 
 		res.status(200).json({});
 	});
-

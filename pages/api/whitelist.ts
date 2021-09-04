@@ -34,7 +34,8 @@ export default nc()
 
 			const server = await prisma.server.findFirst({
 				where: {
-					domain
+					domain,
+					isArchived: false
 				}
 			});
 

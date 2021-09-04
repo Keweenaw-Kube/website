@@ -18,6 +18,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				take: 1,
 				orderBy: {createdAt: 'desc'}
 			}
+		},
+		orderBy: {
+			isArchived: 'asc'
 		}
 	});
 
@@ -56,7 +59,7 @@ const ServersPage = ({servers: propServers}: {servers: string}) => {
 										<div style={{marginBottom: '1.5rem'}}>
 											<Title size={2} textColor="white" style={{marginBottom: '0.5rem'}}>{server.name}</Title>
 
-											<ServerDomainTag domain={server.domain} size="medium" limitToMembers={server.limitToMembers}/>
+											<ServerDomainTag {...server} size="medium"/>
 										</div>
 
 										<p>

@@ -12,7 +12,7 @@ export default nc()
 		res.status(200).json({data: users});
 	})
 	.post(async (request: NextApiRequest, res: NextApiResponse) => {
-		const u = await prisma.user.findOne({where: {email: request.body.email}});
+		const u = await prisma.user.findFirst({where: {email: request.body.email}});
 
 		if (u) {
 			res.status(400).json({error: 'Email already exists'});
