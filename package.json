@@ -7,11 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "xo",
-    "lint-fix": "xo --fix",
-    "postinstall": "prisma generate",
+    "lint:fix": "xo --fix",
     "test": "yarn lint",
-    "makemigrations": "prisma migrate save --experimental",
-    "migrate": "prisma migrate deploy"
+    "migrations:generate": "prisma migrate dev",
+    "migrations:run": "prisma migrate deploy"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",

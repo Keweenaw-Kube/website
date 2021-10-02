@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Migrate database
-yarn migrate
+yarn migrations:run
 
 # Start site
 yarn start
