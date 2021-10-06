@@ -35,6 +35,8 @@ const AboutPage = () => (
 					After joining a server, you can adjust voice settings by pressing <code>v</code>
 				</li>
 			</ol>
+
+			If you would like to use OptiFine as well, you can add <a href="https://www.curseforge.com/minecraft/mc-mods/optifabric">OptiFabric</a> & <a href="https://optifine.net/downloads">OptiFine</a> to your mods folder.
 		</p>
 	</Container>
 );
