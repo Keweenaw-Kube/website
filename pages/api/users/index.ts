@@ -42,4 +42,21 @@ export default nc()
 		} catch {
 			res.status(400).json({error: 'Unknown error'});
 		}
+	})
+	.delete(async (request: NextApiRequest, res: NextApiResponse) => {
+		const {ids} = request.body;
+
+		try {
+			await prisma.user.deleteMany({
+				where: {
+					id: {
+						in: ids
+					}
+				}
+			});
+
+			res.status(200).json({data: []});
+		} catch {
+			res.status(400).json({error: 'Unknown error'});
+		}
 	});

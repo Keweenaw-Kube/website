@@ -97,6 +97,10 @@ export class APIClient {
 		await this.getData(this.client.delete(`api/users/${id}`));
 	}
 
+	async deleteUsers(ids: number[]) {
+		await this.getData(this.client.delete('api/users', {json: {ids}}));
+	}
+
 	async uploadPicture(file: File) {
 		const form = new FormData();
 

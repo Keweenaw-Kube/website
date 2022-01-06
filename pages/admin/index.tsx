@@ -18,6 +18,10 @@ const LINKS = [
 		href: '/admin/pictures'
 	},
 	{
+		label: 'Tools',
+		href: '/admin/tools'
+	},
+	{
 		label: 'Auth Tokens',
 		href: '/admin/tokens'
 	}
