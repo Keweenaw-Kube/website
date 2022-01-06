@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {NextPage} from 'next';
 import {useRouter} from 'next/router';
-import {Title, Container, Box, Block, Field, Label, Control, Input, Textarea, Button} from 'rbx';
+import {Title, Container, Block} from 'rbx';
 import {IUser} from '../../../lib/types';
 import Breadcrumbs from '../../../components/breadcrumbs';
 import {privateRoute} from '../../../components/private-route';
@@ -52,40 +52,53 @@ const EditUser: NextPage<{user: IUser}> = ({user: propsUser}) => {
 
 	const handleFieldChange = (name: string, value: string | boolean) => setUser(s => ({...s, [name]: value}));
 
-	const fields: IFieldDefinition[] = [
-		{
-			label: 'Email',
-			name: 'email',
-			value: user.email,
-			type: 'email',
-			required: true
-		},
-		{
-			label: 'Minecraft Username',
-			name: 'minecraftUsername',
-			value: user.minecraftUsername,
-			type: 'input'
-		},
-		{
-			label: 'Is Officer',
-			name: 'isOfficer',
-			value: user.isOfficer,
-			type: 'checkbox'
-		},
-		{
-			label: 'Is Member',
-			name: 'isMember',
-			value: user.isMember,
-			type: 'checkbox',
-			disabled: user.isOfficer
-		},
-		{
-			label: 'Is Banned',
-			name: 'isBanned',
-			value: user.isBanned,
-			type: 'checkbox'
+	const fields: IFieldDefinition[] = useMemo(() => {
+		const f = [
+			{
+				label: 'Email',
+				name: 'email',
+				value: user.email,
+				type: 'email',
+				required: true
+			},
+			{
+				label: 'Minecraft Username',
+				name: 'minecraftUsername',
+				value: user.minecraftUsername,
+				type: 'input'
+			},
+			{
+				label: 'Is Officer',
+				name: 'isOfficer',
+				value: user.isOfficer,
+				type: 'checkbox'
+			},
+			{
+				label: 'Is Member',
+				name: 'isMember',
+				value: user.isMember,
+				type: 'checkbox',
+				disabled: user.isOfficer
+			},
+			{
+				label: 'Is Banned',
+				name: 'isBanned',
+				value: user.isBanned,
+				type: 'checkbox'
+			}
+		];
+
+		if (user.isBanned) {
+			f.push({
+				label: 'Ban Message',
+				name: 'banMessage',
+				value: user.banMessage,
+				type: 'input'
+			});
 		}
-	];
+
+		return f;
+	}, [user]);
 
 	return (
 		<Container>

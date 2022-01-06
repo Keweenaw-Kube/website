@@ -39,6 +39,7 @@ model User {
   createdAt         DateTime  @default(now()) @db.Timestamp(6)
   isOfficer         Boolean   @default(false)
   isBanned          Boolean   @default(false)
+  banMessage        String?
   minecraftUsername String    @default("")
   minecraftUUID     String    @default("")
   isMember          Boolean   @default(false)

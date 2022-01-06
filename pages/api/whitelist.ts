@@ -28,7 +28,8 @@ export default nc()
 		if (user) {
 			// Check if user is authorized
 			if (user.isBanned) {
-				res.status(401).send('Your user is banned. Please contact an officer.');
+				const message = user.banMessage && user.banMessage !== '' ? user.banMessage : 'Your user is banned. Please contact an officer.';
+				res.status(401).send(message);
 				return;
 			}
 

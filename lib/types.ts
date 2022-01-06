@@ -21,6 +21,7 @@ export interface IUser {
 	isOfficer: boolean;
 	isMember: boolean;
 	isBanned: boolean;
+	banMessage: string;
 	lastLoggedInAt: string;
 }
 
