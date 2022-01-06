@@ -21,11 +21,18 @@ const UsersPage = () => {
 			addHref="/admin/users/new"
 			data={users}
 			loading={users === undefined}
-			headerLabels={['Email', 'Minecraft Username', 'Roles', 'Is Banned', 'Last Login', 'Edit']}
+			headerLabels={['Email', 'Minecraft Username', 'Sponsored By', 'Roles', 'Is Banned', 'Last Login', 'Edit']}
 			renderRow={user => (
 				<Table.Row key={user.id}>
 					<Table.Cell>{user.email}</Table.Cell>
 					<Table.Cell>{user.minecraftUsername}</Table.Cell>
+					<Table.Cell>
+						{user.sponsoredByUserId !== null && (
+							<Link href={`/admin/users/${user.sponsoredByUserId ?? ''}`}>
+								{users?.find(u => u.id === user.sponsoredByUserId)?.minecraftUsername}
+							</Link>
+						)}
+					</Table.Cell>
 					<Table.Cell>
 						<Tag.Group>
 							{user.isMember && (<Tag color="info">Member</Tag>)}

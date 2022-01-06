@@ -4,9 +4,11 @@ import prisma from '../lib/db';
 import {authMiddleware, IRequestWithUser} from '../lib/auth';
 import {getProfileByName} from '../lib/mojang';
 import {parseId} from '../lib/parse-params';
+import {trimBodyFieldsMiddleware} from '../lib/trim-body-fields';
 
 export default nc()
 	.use(authMiddleware({limitToOfficer: false}))
+	.use(trimBodyFieldsMiddleware())
 	.get(async (request: IRequestWithUser, res: NextApiResponse) => {
 		const id = parseId(request);
 
@@ -18,6 +20,10 @@ export default nc()
 		const user = await prisma.user.findFirst({
 			where: {
 				id
+			},
+			include: {
+				sponsoredBy: true,
+				sponsoring: true
 			}
 		});
 
@@ -39,7 +45,7 @@ export default nc()
 		// Check email
 		const u = await prisma.user.findFirst({where: {email: request.body.email}});
 
-		if (u?.id !== id) {
+		if (u && u.id !== id) {
 			res.status(400).json({error: 'Email already exists'});
 			return;
 		}
@@ -58,14 +64,22 @@ export default nc()
 			request.body.minecraftUUID = profile.id;
 		}
 
-		await prisma.user.update({
+		if (!request.body.sponsoredByUserId && (!request.body.email || request.body.email === '')) {
+			res.status(400).json({error: 'Email or sponsorship is required'});
+			return;
+		}
+
+		const updatedUser = await prisma.user.update({
 			where: {
 				id
 			},
-			data: request.body
+			data: {
+				...request.body,
+				email: (request.body.email && request.body.email === '') ? null : request.body.email
+			}
 		});
 
-		res.json({});
+		res.json({data: updatedUser});
 	})
 	.delete(async (request: IRequestWithUser, res: NextApiResponse) => {
 		const id = parseId(request);

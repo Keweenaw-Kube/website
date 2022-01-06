@@ -2,7 +2,7 @@ import {NextPageContext} from 'next';
 import ky, {Options, ResponsePromise} from 'ky';
 import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
-import {IServer, IUser, IPicture} from './types';
+import {IServer, IUser, IUserWithSponsorInfo, IPicture} from './types';
 
 interface IAPIResponse<T> {
 	data: T;
@@ -86,7 +86,7 @@ export class APIClient {
 	}
 
 	async getUser(id: number) {
-		return this.getData<IUser>(this.client.get(`api/users/${id}`));
+		return this.getData<IUserWithSponsorInfo>(this.client.get(`api/users/${id}`));
 	}
 
 	async putUser(id: number, user: Except<IUser, 'minecraftUUID'>) {

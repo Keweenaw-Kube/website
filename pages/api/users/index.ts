@@ -3,11 +3,39 @@ import nc from 'next-connect';
 import prisma from '../lib/db';
 import {authMiddleware} from '../lib/auth';
 import {getProfileByName} from '../lib/mojang';
+import {trimBodyFieldsMiddleware} from '../lib/trim-body-fields';
 
 export default nc()
 	.use(authMiddleware({limitToOfficer: true}))
+	.use(trimBodyFieldsMiddleware())
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
-		const users = await prisma.user.findMany({orderBy: {email: 'asc'}});
+		const {has} = request.query;
+
+		const requiredFields = [];
+
+		if (typeof has === 'string') {
+			requiredFields.push(has);
+		} else if (Array.isArray(has)) {
+			requiredFields.push(...has);
+		}
+
+		const users = await prisma.user.findMany({
+			where: {
+				AND: [
+					...requiredFields.map(field => ({
+						[field]: {
+							not: null
+						}
+					})),
+					...requiredFields.map(field => ({
+						[field]: {
+							not: ''
+						}
+					}))
+				]
+			},
+			orderBy: {email: 'asc'}
+		});
 
 		res.status(200).json({data: users});
 	})
@@ -33,9 +61,17 @@ export default nc()
 			request.body.minecraftUUID = profile.id;
 		}
 
+		if (!request.body.sponsoredByUserId && (!request.body.email || request.body.email === '')) {
+			res.status(400).json({error: 'Email or sponsorship is required'});
+			return;
+		}
+
 		try {
 			const user = await prisma.user.create({
-				data: request.body
+				data: {
+					...request.body,
+					email: (request.body.email && request.body.email === '') ? null : request.body.email
+				}
 			});
 
 			res.json({data: user});

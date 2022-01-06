@@ -5,22 +5,24 @@ import {ConditionalKeys} from 'type-fest';
 import {useAPIRoute} from './api-client-context';
 import styles from './styles/object-autosuggest-selector.module.scss';
 
-type ModelWithId = {
+export type ModelWithId = {
 	id: number;
 };
 
-interface Props<T extends ModelWithId> {
+export interface ObjectAutosuggestSelectorProps<T extends ModelWithId> {
 	apiPath: string;
 	renderSuggestion: (s: T) => React.ReactNode;
 	getSuggestionValue: (s: T) => string;
 	placeholder: string;
 	onSelection: (s: T) => void;
+	onClear?: () => void;
 	label: string;
-	selection?: T;
-	searchFields: Array<ConditionalKeys<T, string>>;
+	selection?: T | null;
+	searchFields: Array<ConditionalKeys<T, string | null>>;
+	filter?: (s: T) => boolean;
 }
 
-const ObjectAutosuggestSelector = <T extends ModelWithId>({apiPath, renderSuggestion, getSuggestionValue, placeholder, onSelection, label, selection, searchFields}: Props<T>) => {
+const ObjectAutosuggestSelector = <T extends ModelWithId>({apiPath, renderSuggestion, getSuggestionValue, placeholder, onSelection, onClear, label, selection, searchFields, filter}: ObjectAutosuggestSelectorProps<T>) => {
 	const apiResults = useAPIRoute<T[]>(apiPath);
 	const [inputValue, setInputValue] = useState('');
 	const [suggestions, setSuggestions] = useState<T[]>([]);
@@ -29,12 +31,20 @@ const ObjectAutosuggestSelector = <T extends ModelWithId>({apiPath, renderSugges
 	const updateSuggestions = useCallback((value: string) => {
 		if (apiResults) {
 			setSuggestions(apiResults.filter(result => {
+				if (filter) {
+					if (!filter(result)) {
+						return false;
+					}
+				}
+
 				let include = false;
 
 				searchFields.forEach(field => {
 					// TODO: improve typings
-					if ((result[field] as unknown as string).toLowerCase().includes(value.toLowerCase())) {
-						include = true;
+					if (result[field] && typeof result[field] === 'string') {
+						if ((result[field] as unknown as string).toLowerCase().includes(value.toLowerCase())) {
+							include = true;
+						}
 					}
 				});
 
@@ -61,6 +71,13 @@ const ObjectAutosuggestSelector = <T extends ModelWithId>({apiPath, renderSugges
 			}
 		}
 	}, [isSuggesting, selection, getSuggestionValue]);
+
+	const handleClear = useCallback(() => {
+		if (onClear) {
+			setIsSuggesting(false);
+			onClear();
+		}
+	}, [onClear]);
 
 	return (
 		<Field>
@@ -90,6 +107,14 @@ const ObjectAutosuggestSelector = <T extends ModelWithId>({apiPath, renderSugges
 				{selection && !isSuggesting && <Input disabled value={getSuggestionValue(selection)} style={{width: 'auto'}}/>}
 
 				<Button type="button" color="info" style={isSuggesting || selection ? ({marginLeft: '1rem'}) : {}} onClick={handleAction}>{isSuggesting ? 'Cancel' : (selection ? 'Edit' : 'Select')}</Button>
+
+				{
+					(isSuggesting && onClear) && (
+						<Button type="button" color="danger" style={{marginLeft: '1rem'}} onClick={handleClear}>
+							Clear
+						</Button>
+					)
+				}
 			</div>
 		</Field>
 	);

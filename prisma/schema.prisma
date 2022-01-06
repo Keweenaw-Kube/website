@@ -35,7 +35,7 @@ model Server {
 
 model User {
   id                Int       @id @default(autoincrement())
-  email             String    @unique
+  email             String?   @unique
   createdAt         DateTime  @default(now()) @db.Timestamp(6)
   isOfficer         Boolean   @default(false)
   isBanned          Boolean   @default(false)
@@ -44,7 +44,12 @@ model User {
   minecraftUUID     String    @default("")
   isMember          Boolean   @default(false)
   lastLoggedInAt    DateTime? @default(now())
-  pictures          Picture[]
+
+  sponsoredByUserId Int?
+  sponsoredBy       User?  @relation("sponsor", fields: [sponsoredByUserId], references: [id])
+  sponsoring        User[] @relation("sponsor")
+
+  pictures Picture[]
 }
 
 model WhitelistToken {

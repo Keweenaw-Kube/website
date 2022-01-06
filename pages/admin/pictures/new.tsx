@@ -117,7 +117,7 @@ const AddPicture = () => {
 							<span>{s.minecraftUsername}</span>
 						</>
 					)}
-					getSuggestionValue={s => s.email}
+					getSuggestionValue={s => s.email ?? s.minecraftUsername}
 					selection={user}
 					searchFields={['email', 'minecraftUsername']}
 					onSelection={setUser}

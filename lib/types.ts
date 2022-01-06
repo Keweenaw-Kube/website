@@ -15,14 +15,20 @@ export interface IRole {
 
 export interface IUser {
 	id: number;
-	email: string;
+	email: string | null;
 	minecraftUUID: string;
 	minecraftUsername: string;
 	isOfficer: boolean;
 	isMember: boolean;
 	isBanned: boolean;
-	banMessage: string | null;
+	banMessage?: string | null;
 	lastLoggedInAt: string;
+	sponsoredByUserId?: number | null;
+}
+
+export interface IUserWithSponsorInfo extends IUser {
+	sponsoredBy?: IUser;
+	sponsoring: IUser[];
 }
 
 export interface IMojangName {

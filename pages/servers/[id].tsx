@@ -36,8 +36,6 @@ interface IServerWithPictures extends IServer {
 const SpecificServerPage = ({server: propServer}: {server: string}) => {
 	const server: IServerWithPictures = JSON.parse(propServer);
 
-	console.log(server);
-
 	return (
 		<Container>
 			<Block/>
