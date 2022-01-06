@@ -52,8 +52,8 @@ const EditUser: NextPage<{user: IUser}> = ({user: propsUser}) => {
 
 	const handleFieldChange = (name: string, value: string | boolean) => setUser(s => ({...s, [name]: value}));
 
-	const fields: IFieldDefinition[] = useMemo(() => {
-		const f = [
+	const fields = useMemo(() => {
+		const f: IFieldDefinition[] = [
 			{
 				label: 'Email',
 				name: 'email',
@@ -92,7 +92,7 @@ const EditUser: NextPage<{user: IUser}> = ({user: propsUser}) => {
 			f.push({
 				label: 'Ban Message',
 				name: 'banMessage',
-				value: user.banMessage,
+				value: user.banMessage ?? '',
 				type: 'input'
 			});
 		}

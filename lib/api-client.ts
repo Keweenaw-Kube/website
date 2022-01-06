@@ -81,7 +81,7 @@ export class APIClient {
 		await this.getData(this.client.delete(`api/servers/${id}`));
 	}
 
-	async createUser(user: Except<IUser, 'id' | 'minecraftUUID' | 'lastLoggedInAt'>) {
+	async createUser(user: Except<IUser, 'id' | 'minecraftUUID' | 'lastLoggedInAt' | 'banMessage'>) {
 		return this.getData<IUser>(this.client.post('api/users', {json: user}));
 	}
 

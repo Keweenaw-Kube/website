@@ -13,7 +13,7 @@ const NewUser = () => {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [errorMsg, setErrorMsg] = useState('');
-	const [user, setUser] = useState<Except<IUser, 'id' | 'minecraftUUID' | 'lastLoggedInAt'>>({
+	const [user, setUser] = useState<Except<IUser, 'id' | 'minecraftUUID' | 'lastLoggedInAt' | 'banMessage'>>({
 		email: '',
 		minecraftUsername: '',
 		isOfficer: false,
