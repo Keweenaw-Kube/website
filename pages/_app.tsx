@@ -1,8 +1,6 @@
 import React from 'react';
-import App, {AppProps} from 'next/app';
+import App, {AppProps, AppContext} from 'next/app';
 import Head from 'next/head';
-import {Router} from 'next/router';
-import {AppContextType} from 'next/dist/next-server/lib/utils';
 import ButterToast, {POS_BOTTOM, POS_RIGHT} from 'butter-toast';
 // eslint-disable-next-line import/no-unassigned-import
 import './styles/global.scss';
@@ -26,14 +24,14 @@ function MyApp({Component, pageProps}: AppProps) {
 	);
 }
 
-const WrappedApp = (props: AppProps & {token: AuthToken}) => (
+const WrappedApp = (props: AppProps & { token: AuthToken }) => (
 	<APIClientProvider token={props.token}>
 		<MyApp {...props}/>
 	</APIClientProvider>
 );
 
 // TODO: convert to server-side props?
-WrappedApp.getInitialProps = async (props: AppContextType<Router>) => {
+WrappedApp.getInitialProps = async (props: AppContext) => {
 	const appProps = await App.getInitialProps(props);
 
 	return {

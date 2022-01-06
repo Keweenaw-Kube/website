@@ -1,6 +1,5 @@
 import {NextPageContext} from 'next';
-import ky from 'ky/umd';
-import {Options, ResponsePromise} from 'ky';
+import ky, {Options, ResponsePromise} from 'ky';
 import {Except} from 'type-fest';
 import {AuthToken} from './auth-token';
 import {IServer, IUser, IPicture} from './types';
