@@ -22,15 +22,16 @@ model Picture {
 }
 
 model Server {
-  id             Int       @id @default(autoincrement())
-  name           String    @db.VarChar(255)
-  domain         String    @db.VarChar(255)
-  description    String
-  createdAt      DateTime  @default(now()) @db.Timestamp(6)
-  limitToMembers Boolean   @default(true)
-  isArchived     Boolean   @default(false)
-  archiveFileUrl String?
-  pictures       Picture[]
+  id                Int                     @id @default(autoincrement())
+  name              String                  @db.VarChar(255)
+  domain            String                  @db.VarChar(255)
+  description       String
+  createdAt         DateTime                @default(now()) @db.Timestamp(6)
+  limitToMembers    Boolean                 @default(true)
+  isArchived        Boolean                 @default(false)
+  archiveFileUrl    String?
+  pictures          Picture[]
+  connectionHistory UserConnectionHistory[]
 }
 
 model User {
@@ -49,7 +50,24 @@ model User {
   sponsoredBy       User?  @relation("sponsor", fields: [sponsoredByUserId], references: [id])
   sponsoring        User[] @relation("sponsor")
 
-  pictures Picture[]
+  pictures          Picture[]
+  connectionHistory UserConnectionHistory[]
+}
+
+enum ConnectionEvent {
+  CONNECTED
+  DISCONNECTED
+  DENIED
+}
+
+model UserConnectionHistory {
+  id        String          @id @default(cuid())
+  userId    Int
+  serverId  Int
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  server    Server          @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  event     ConnectionEvent
+  createdAt DateTime        @default(now())
 }
 
 model WhitelistToken {

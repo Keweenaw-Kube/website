@@ -4,8 +4,22 @@ import * as securePin from 'secure-pin';
 import prisma from './lib/db';
 import {authMiddleware, authWithToken, IRequestWithUser} from './lib/auth';
 import {getProfileByUUID} from './lib/mojang';
+import {User, Server, ConnectionEvent} from '@prisma/client';
 
 const CODE_VALID_PERIOD_MS = 5 * 60 * 1000;
+
+const isUserAuthorizedOnServer = (user: User, server: Server): {isAuthorized: boolean; msg?: string} => {
+	if (user.isBanned) {
+		const msg = user.banMessage && user.banMessage !== '' ? user.banMessage : 'Your user is banned. Please contact an officer.';
+		return {isAuthorized: false, msg};
+	}
+
+	if (server.limitToMembers && !user.isMember) {
+		return {isAuthorized: false, msg: 'You must be a member to access this server.'};
+	}
+
+	return {isAuthorized: true};
+};
 
 export default nc()
 	.get(async (request: NextApiRequest, res: NextApiResponse) => {
@@ -25,41 +39,65 @@ export default nc()
 			}
 		});
 
+		const server = await prisma.server.findFirst({
+			where: {
+				domain,
+				isArchived: false
+			}
+		});
+
+		if (!server) {
+			res.status(500).send('Server error. Please contact an officer.');
+			return;
+		}
+
 		if (user) {
+			if (request.query.state === 'disconnected') {
+				await prisma.userConnectionHistory.create({
+					data: {
+						userId: user.id,
+						serverId: server.id,
+						event: ConnectionEvent.DISCONNECTED
+					}
+				});
+				res.status(200).send('');
+				return;
+			}
+
 			// Check if user is authorized
-			if (user.isBanned) {
-				const message = user.banMessage && user.banMessage !== '' ? user.banMessage : 'Your user is banned. Please contact an officer.';
-				res.status(401).send(message);
-				return;
+			const {isAuthorized, msg: deniedMsg} = isUserAuthorizedOnServer(user, server);
+
+			if (isAuthorized) {
+				await Promise.all([
+					prisma.user.update({
+						where: {
+							id: user.id
+						},
+						data: {
+							lastLoggedInAt: new Date()
+						}
+					}),
+					prisma.userConnectionHistory.create({
+						data: {
+							userId: user.id,
+							serverId: server.id,
+							event: ConnectionEvent.CONNECTED
+						}
+					})
+				]);
+
+				res.status(200).send('');
+			} else {
+				await prisma.userConnectionHistory.create({
+					data: {
+						userId: user.id,
+						serverId: server.id,
+						event: ConnectionEvent.DENIED
+					}
+				});
+
+				res.status(401).send(deniedMsg ?? 'You\'re authorized to access this server.');
 			}
-
-			const server = await prisma.server.findFirst({
-				where: {
-					domain,
-					isArchived: false
-				}
-			});
-
-			if (!server) {
-				res.status(500).send('Server error. Please contact an officer.');
-				return;
-			}
-
-			if (server.limitToMembers && !user.isMember) {
-				res.status(401).send('You must be a member to access this server.');
-				return;
-			}
-
-			await prisma.user.update({
-				where: {
-					id: user.id
-				},
-				data: {
-					lastLoggedInAt: new Date()
-				}
-			});
-
-			res.status(200).send('');
 		} else {
 			// Generate code for user
 			securePin.generatePin(6, async pin => {

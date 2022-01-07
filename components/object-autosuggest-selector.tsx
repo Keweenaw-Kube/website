@@ -51,7 +51,7 @@ const ObjectAutosuggestSelector = <T extends ModelWithId>({apiPath, renderSugges
 				return include;
 			}));
 		}
-	}, [apiResults, searchFields]);
+	}, [filter, apiResults, searchFields]);
 
 	const inputProps = {
 		placeholder,

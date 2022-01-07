@@ -29,7 +29,7 @@ const UsersPage = () => {
 					<Table.Cell>
 						{user.sponsoredByUserId !== null && (
 							<Link href={`/admin/users/${user.sponsoredByUserId ?? ''}`}>
-								{users?.find(u => u.id === user.sponsoredByUserId)?.minecraftUsername}
+								{users?.find(u => u.id === user.sponsoredByUserId)?.email}
 							</Link>
 						)}
 					</Table.Cell>
