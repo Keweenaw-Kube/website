@@ -9,6 +9,7 @@ import {format} from 'date-fns';
 import {CalendarTooltipProps, ResponsiveCalendar} from '@nivo/calendar';
 import {useAPIRoute, useAPI} from '../../../components/api-client-context';
 import {privateRoute} from '../../../components/private-route';
+import MinecraftPlayerHead from '../../../components/minecraft-player-head';
 import {APIClient} from '../../../lib/api-client';
 import {IUserWithSponsorInfo} from '../../../lib/types';
 import Breadcrumbs from '../../../components/breadcrumbs';
@@ -112,9 +113,17 @@ const ViewUser: NextPage<{user: IUserWithSponsorInfo}> = ({user}) => {
 
 			<Breadcrumbs/>
 
-			<Column.Group>
+			<Column.Group vcentered>
+				{
+					user.minecraftUUID && (
+						<Column narrow>
+							<MinecraftPlayerHead uuid={user.minecraftUUID}/>
+						</Column>
+					)
+				}
+
 				<Column>
-					<Title size={1}>{user.minecraftUsername}</Title>
+					<Title size={1} style={{marginBottom: '0.5rem'}}>{user.minecraftUsername}</Title>
 					<Title size={3} textColor="grey-light">{user.email}</Title>
 				</Column>
 
