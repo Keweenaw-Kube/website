@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Link from 'next/link';
-import {Title, Container, Box, Block, Table, Button, Icon, Progress, Column, Tag} from 'rbx';
+import {Table, Button, Icon, Tag} from 'rbx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faPen} from '@fortawesome/free-solid-svg-icons';
+import {faChartBar, faPen} from '@fortawesome/free-solid-svg-icons';
 import relativeDate from 'relative-date';
 import {privateRoute} from '../../../components/private-route';
 import {useAPIRoute, useAPI} from '../../../components/api-client-context';
@@ -21,7 +21,7 @@ const UsersPage = () => {
 			addHref="/admin/users/new"
 			data={users}
 			loading={users === undefined}
-			headerLabels={['Email', 'Minecraft Username', 'Sponsored By', 'Roles', 'Is Banned', 'Last Login', 'Edit']}
+			headerLabels={['Email', 'Minecraft Username', 'Sponsored By', 'Roles', 'Is Banned', 'Last Login', 'View', 'Edit']}
 			renderRow={user => (
 				<Table.Row key={user.id}>
 					<Table.Cell>{user.email}</Table.Cell>
@@ -43,6 +43,15 @@ const UsersPage = () => {
 					<Table.Cell>{relativeDate(new Date(user.lastLoggedInAt))}</Table.Cell>
 					<Table.Cell>
 						<Link passHref href={`/admin/users/${user.id}`}>
+							<Button color="info" as="a">
+								<Icon size="small">
+									<FontAwesomeIcon icon={faChartBar} color="black"/>
+								</Icon>
+							</Button>
+						</Link>
+					</Table.Cell>
+					<Table.Cell>
+						<Link passHref href={`/admin/users/edit/${user.id}`}>
 							<Button color="warning" as="a" disabled={user.email === myEmail} style={user.email === myEmail ? ({pointerEvents: 'none'}) : ({})}>
 								<Icon size="small">
 									<FontAwesomeIcon icon={faPen} color="black"/>

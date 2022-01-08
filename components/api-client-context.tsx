@@ -29,7 +29,7 @@ export const useAPI = () => {
 	return {client, setAuthToken};
 };
 
-export const useAPIRoute = function <T>(route: string) {
+export const useAPIRoute = function <T>(route: string | null) {
 	const router = useRouter();
 	const {client, setAuthToken} = useAPI();
 

@@ -1,10 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import nc from 'next-connect';
-import prisma from '../lib/db';
-import {authMiddleware, IRequestWithUser} from '../lib/auth';
-import {getProfileByName} from '../lib/mojang';
-import {parseId} from '../lib/parse-params';
-import {trimBodyFieldsMiddleware} from '../lib/trim-body-fields';
+import prisma from '../../lib/db';
+import {authMiddleware, IRequestWithUser} from '../../lib/auth';
+import {getProfileByName} from '../../lib/mojang';
+import {parseId} from '../../lib/parse-params';
+import {trimBodyFieldsMiddleware} from '../../lib/trim-body-fields';
 
 export default nc()
 	.use(authMiddleware({limitToOfficer: false}))
