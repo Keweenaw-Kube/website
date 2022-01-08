@@ -213,9 +213,9 @@ const ViewUser: NextPage<{user: IUserWithSponsorInfo}> = ({user}) => {
 					</Table.Row>
 				</Table.Head>
 
-				{/* @ts-expect-error */}
+				{/* @ts-ignore-error */}
 				<Table.Body>
-					{/* @ts-expect-error */}
+					{/* @ts-ignore-error */}
 					{connectionHistory?.map(event => (
 						<Table.Row key={event.id}>
 							<Table.Cell>{event.event}</Table.Cell>

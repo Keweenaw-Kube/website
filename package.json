@@ -81,7 +81,8 @@
       "react/function-component-definition": "off",
       "unicorn/prevent-abbreviations": "off",
       "react/prop-types": "off",
-      "unicorn/no-reduce": "off"
+      "unicorn/no-reduce": "off",
+      "@typescript-eslint/prefer-ts-expect-error": "off"
     }
   },
   "husky": {
