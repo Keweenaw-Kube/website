@@ -20,7 +20,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			}
 		},
 		orderBy: {
-			isArchived: 'asc',
 			createdAt: 'desc'
 		}
 	});
